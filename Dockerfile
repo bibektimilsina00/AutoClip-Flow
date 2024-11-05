@@ -11,6 +11,7 @@ RUN apk add --no-cache \
     libffi-dev \
     curl \
     make \
+    bash \
     openssl-dev
 
 

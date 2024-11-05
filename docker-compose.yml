@@ -3,11 +3,11 @@ networks:
     driver: bridge 
 
 services:
-  web:
+  auto_clip_flow:
+    container_name: auto_clip_flow
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: web_app
     networks:
       - app-network
     ports:
