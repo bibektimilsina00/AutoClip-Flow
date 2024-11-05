@@ -1,0 +1,18 @@
+# Ignore all contents inside the video folder
+video/*
+
+# Ignore all contents inside the data folder
+data/*
+
+# Ignore all contents inside the api_keys folder
+api_keys/*
+
+# Allow the folders themselves to be tracked
+!video/
+!data/
+!api_keys/
+
+# Optionally, keep a .gitkeep file in each folder to ensure the folder is tracked
+!video/.gitkeep
+!data/.gitkeep
+!api_keys/.gitkeep

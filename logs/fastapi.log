@@ -1,0 +1,11 @@
+INFO:     Started server process [62210]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:54039 - "DELETE /api/v1/automation/delete_all_user_tasks HTTP/1.1" 200 OK
+[32m2024-11-05 08:01:51,993 - FASTAPI - INFO - Starting automation for user None[0m
+INFO:     127.0.0.1:54039 - "POST /api/v1/automation/start_automation HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [62210]

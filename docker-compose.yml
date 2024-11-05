@@ -1,0 +1,79 @@
+networks: 
+  app-network: 
+    driver: bridge 
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web_app
+    networks:
+      - app-network
+    ports:
+      - "8000:8000"
+    environment:
+      - INSTALL_DEV=false
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./cookies:/app/cookies
+    command: ["/bin/sh", "-c", "./prestart.sh && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: celery_worker
+    networks:
+      - app-network
+    environment:
+      - INSTALL_DEV=false
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+    command: ["celery", "-A", "celery_worker.celery_worker", "worker", "--loglevel=info"]
+
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flower
+    networks:
+      - app-network
+    ports:
+      - "5555:5555"
+    environment:
+      - INSTALL_DEV=false
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+      - celery_worker
+    command: ["celery", "-A", "celery_worker.celery_worker", "flower", "--port=5555"]
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    networks:
+      - app-network
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:16-alpine 
+    container_name: postgres_db
+    networks:       
+      - app-network
+    ports:       
+      - "5432:5432"
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:

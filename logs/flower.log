@@ -1,0 +1,25 @@
+[I 241105 08:01:31 command:168] Visit me at http://0.0.0.0:5555
+[I 241105 08:01:31 command:176] Broker: redis://localhost:6379/0
+[I 241105 08:01:31 command:177] Registered tasks: 
+    ['celery.accumulate',
+     'celery.backend_cleanup',
+     'celery.chain',
+     'celery.chord',
+     'celery.chord_unlock',
+     'celery.chunks',
+     'celery.group',
+     'celery.map',
+     'celery.starmap',
+     'celery_worker.task.process_task',
+     'celery_worker.task.run_user_automation',
+     'celery_worker.task.schedule_next_day']
+[I 241105 08:01:31 mixins:228] Connected to redis://localhost:6379/0
+[W 241105 08:01:32 inspector:44] Inspect method reserved failed
+[W 241105 08:01:32 inspector:44] Inspect method registered failed
+[W 241105 08:01:32 inspector:44] Inspect method conf failed
+[W 241105 08:01:32 inspector:44] Inspect method scheduled failed
+[W 241105 08:01:32 inspector:44] Inspect method revoked failed
+[W 241105 08:01:32 inspector:44] Inspect method stats failed
+[W 241105 08:01:32 inspector:44] Inspect method active failed
+[W 241105 08:01:32 inspector:44] Inspect method active_queues failed
+[I 241105 08:11:07 command:28] 15 detected, shutting down
