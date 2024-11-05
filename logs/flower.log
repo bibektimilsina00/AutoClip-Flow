@@ -1,6 +1,6 @@
-[I 241105 10:52:06 command:168] Visit me at http://0.0.0.0:5555
-[I 241105 10:52:06 command:176] Broker: redis://localhost:6379/0
-[I 241105 10:52:06 command:177] Registered tasks: 
+[I 241105 12:43:26 command:168] Visit me at http://0.0.0.0:5555
+[I 241105 12:43:26 command:176] Broker: redis://localhost:6379/0
+[I 241105 12:43:26 command:177] Registered tasks: 
     ['celery.accumulate',
      'celery.backend_cleanup',
      'celery.chain',
@@ -21,11 +21,13 @@ Traceback (most recent call last):
     sys.exit(_main())
              ~~~~~^^
   File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/celery/bin/celery.py", line 236, in main
-    return celery(au[E 241105 10:54:00 events:191] Failed to capture events: 'Connection closed by server.', trying again in 1 seconds.
-[E 241105 10:54:07 events:191] Failed to capture events: 'Error 61 connecting to localhost:6379. Connection refused.', trying again in 2 seconds.
-[E 241105 10:54:15 events:191] Failed to capture events: 'Error 61 connecting to localhost:6379. Connection refused.', trying again in 4 seconds.
-[E 241105 10:54:25 events:191] Failed to capture events: 'Error 61 connecting to localhost:6379. Connection refused.', trying again in 8 seconds.
-kages/click/core.py", line 1688, in invoke
+    return celery(auto_envvar_prefix="CELERY")
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/click/core.py", line 1688, in invoke
     return _process_result(sub_ctx.command.invoke(sub_ctx))
                            ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
   File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/click/core.py", line 1434, in invoke
