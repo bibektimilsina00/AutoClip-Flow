@@ -1,9 +1,15 @@
+import os
+
 from celery import Celery
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 celery_worker = Celery(
     "worker",
-    backend="redis://localhost:6379/0",
-    broker="redis://localhost:6379/0",
+    backend=os.getenv("CELERY_BACKEND"),
+    broker=os.getenv("CELERY_BROKER"),
     include=["celery_worker.task"],
 )
 

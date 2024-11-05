@@ -13,6 +13,14 @@ RUN apk add --no-cache \
     make \
     openssl-dev
 
+
+RUN apk add --no-cache \
+    xvfb \
+    chromium \
+    chromium-chromedriver \
+    && rm -rf /var/cache/apk/*
+
+
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3 && \
     ln -s /opt/poetry/bin/poetry /usr/local/bin/poetry && \

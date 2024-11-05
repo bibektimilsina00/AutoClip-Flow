@@ -53,7 +53,7 @@ def process_task(self, task_id: str):
 
             options = sb_utils.get_undetectable_options()
 
-            with SB(uc=True) as sb:
+            with SB(uc=True, xvfb=True) as sb:
 
                 try:
                     self.update_state(

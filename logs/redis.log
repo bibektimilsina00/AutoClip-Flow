@@ -1,1 +1,2 @@
-c72c4e68391cd9a591c846f2d54c6a9ac0e03f8acfd20f1f7e5f05d166fd4cc4
+docker: Error response from daemon: Conflict. The container name "/video_uploder-redis-1" is already in use by container "09f0c5efcda7092a82dbe254bfbbee437b5904df5bff3f18e2a46ce4a605c014". You have to remove (or rename) that container to be able to reuse that name.
+See 'docker run --help'.
