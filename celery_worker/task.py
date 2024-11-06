@@ -53,7 +53,12 @@ def process_task(self, task_id: str):
 
             options = sb_utils.get_undetectable_options()
 
-            with SB(uc=True, xvfb=True) as sb:
+            with SB(uc=True) as sb:
+                # make full screen
+                sb.driver.maximize_window()
+                sb.driver.set_window_size(1920, 1080)
+                # zoom out to 80%
+                sb.driver.execute_script("document.body.style.zoom='80%'")
 
                 try:
                     self.update_state(
@@ -120,26 +125,30 @@ def run_user_automation(user_id: int):
         # Get the current time in UTC
         now = datetime.now(pytz.utc)
 
-        # Set the start time to now
-        start_time = now
+        # Initialize scheduled_time to now
+        scheduled_time = now
 
         # Number of runs per day
-        num_runs_per_day = random.randint(10, 15)
+        num_rounds_per_day = random.randint(10, 15)
 
-        # Time interval between tasks (5-6 minutes)
-        task_interval = timedelta(minutes=random.randint(5, 6))
+        # Task duration and buffer time (in minutes)
+        min_task_duration = 5
+        max_task_duration = 6
+        buffer_minutes = 1  # Time between tasks to prevent overlap
 
-        for run in range(num_runs_per_day):
+        for round_number in range(num_rounds_per_day):
+            logger.info(f"Starting scheduling for round {round_number + 1}")
             for account in accounts:
                 # Calculate the scheduled time for this task
-                scheduled_time = (
-                    start_time
-                    + (run * len(accounts) + accounts.index(account)) * task_interval
+                # Randomize the task duration between min and max
+                task_duration_minutes = random.randint(
+                    min_task_duration, max_task_duration
                 )
+                task_duration = timedelta(minutes=task_duration_minutes)
 
                 # Create a new UserTask
                 user_task_in = UserTaskCreate(
-                    title=f"Automation for account {account.email}",
+                    title=f"Automation for account {account.email} - Round {round_number + 1}",
                     user_id=user_id,
                     account_id=account.id,
                     status=TaskStatus.PENDING,
@@ -153,23 +162,31 @@ def run_user_automation(user_id: int):
                 logger.info(
                     f"Scheduled task for account {account.email} at {scheduled_time} UTC"
                 )
+                # Update scheduled_time for the next task
+                # Add task duration plus a buffer to prevent overlap
+                scheduled_time += task_duration + timedelta(minutes=buffer_minutes)
+                # Optional: Add a break between rounds
+            round_break_minutes = random.randint(
+                1, 5
+            )  # Random break between 1 to 5 minutes
+            scheduled_time += timedelta(minutes=round_break_minutes)
 
         session.commit()
 
-    # Schedule the next day's automation
-    next_day_start = start_time + timedelta(days=1)
+    # Schedule the next day's automation at midnight UTC
+    next_day_start = now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(
+        days=1
+    )
+
     celery_worker.send_task(
-        "celery_worker.task.run_user_automation", args=[user_id], eta=next_day_start
+        "celery_worker.task.run_user_automation",
+        args=[user_id],
+        eta=next_day_start,
     )
 
     logger.info(
         f"Scheduled next day's automation for user_id: {user_id} at {next_day_start} UTC"
     )
-
-
-@celery_worker.task
-def schedule_next_day(user_id: int):
-    run_user_automation(user_id)
 
 
 def schedule_task_automation(task_id: str, eta: datetime) -> Task:

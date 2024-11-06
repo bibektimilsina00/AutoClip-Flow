@@ -6,7 +6,7 @@ CELERY_APP="celery_worker.celery_worker"  # Adjust to your actual Celery app loc
 FASTAPI_APP="app.main:app"  # Replace with the path to your FastAPI instance
 UVICORN_PORT=8000
 FLOWER_PORT=5555
-REDIS_CONTAINER_NAME="video_uploder-redis-1"  
+REDIS_CONTAINER_NAME="redis"  
 
 # Log files
 FASTAPI_LOG="logs/fastapi.log"

@@ -12,7 +12,7 @@ from app.models.account_model import Account
 from app.models.task_model import TaskStatus, UserTask, UserTaskCreate, UserTaskUpdate
 from automation.utils.logging_utils import fast_api_logger as logger
 from celery_worker.celery_worker import celery_worker
-from celery_worker.task import schedule_task_automation
+from celery_worker.task import run_user_automation
 
 # Create a router for automation
 router = APIRouter()
@@ -125,25 +125,4 @@ async def delete_all_user_tasks(
 
 
 def schedule_automation(user_id: int):
-    # Schedule the automation to run 10-15 times per day at random times
-    num_runs = random.randint(10, 15)
-
-    # Get the current date
-    today = datetime.now().date()
-
-    # Schedule tasks for today
-    for _ in range(num_runs):
-        # Generate a random time between 00:00 and 23:59
-        random_time = timedelta(minutes=random.randint(0, 1439))
-        schedule_time = datetime.combine(today, datetime.min.time()) + random_time
-
-        celery_worker.send_task(
-            "celery_worker.task.run_user_automation", args=[user_id], eta=schedule_time
-        )
-
-    # Schedule the next day's automation
-    next_day = today + timedelta(days=1)
-    next_day_midnight = datetime.combine(next_day, datetime.min.time())
-    celery_worker.send_task(
-        "celery_worker.task.schedule_next_day", args=[user_id], eta=next_day_midnight
-    )
+    run_user_automation.delay(user_id)

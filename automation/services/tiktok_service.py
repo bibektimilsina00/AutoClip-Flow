@@ -96,6 +96,7 @@ class TikTokService:
             sb_utils.human_like_type(sb, 'input[name="username"]', self.email)
             sb_utils.human_like_type(sb, 'input[type="password"]', self.password)
             sb_utils.human_like_click(sb, 'button[type="submit"]')
+
             WebDriverWait(sb.driver, 10).until(
                 EC.url_changes(self.platform.get_login_url())
             )
@@ -144,7 +145,7 @@ class TikTokService:
             # logger.info("Adding hashtags")
             # self.add_hashtags(sb, ["#YourHashtags"])
             # sb.wait(2)
-
+            sb.scroll_to('button:contains("Post")')
             sb.wait_for_element_clickable('button:contains("Post")', timeout=30)
 
             sb_utils.human_like_click(sb, 'button:contains("Post")')
