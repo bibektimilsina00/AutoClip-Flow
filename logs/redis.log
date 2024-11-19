@@ -1,1 +1,4 @@
-3d288109d27fcfce7c596f1b54c9a8d02099e48310397b167ba4faf0c34a845c
+Unable to find image 'redis:latest' locally
+latest: Pulling from library/redis
+
+got 3 SIGTERM/SIGINTs, forcefully exiting

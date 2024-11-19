@@ -1,8 +1,20 @@
-INFO:     Started server process [78391]
+INFO:     Started server process [7490]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [78391]
+ERROR:    Traceback (most recent call last):
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 700, in lifespan
+    await receive()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 174, in _sentry_receive
+    return await receive(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/lifespan/on.py", line 137, in receive
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/queues.py", line 186, in get
+    await getter
+asyncio.exceptions.CancelledError
+
+Sentry is attempting to send 2 pending events
+Waiting up to 2 seconds
+Press Ctrl-C to quit

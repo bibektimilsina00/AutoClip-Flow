@@ -86,8 +86,8 @@ class MainApp(BaseCase):
             while not upload_success and retry_count < max_retries:
                 try:
                     if platform == "youtube":
-                        upload_success = True
-                        continue
+                        # upload_success = True
+                        # continue
                         upload_success = self.upload_to_youtube(
                             sb, video, email, password, video_path
                         )

@@ -56,7 +56,6 @@ def process_task(self, task_id: str):
             with SB(uc=True) as sb:
                 # make full screen
                 sb.driver.maximize_window()
-                sb.driver.set_window_size(1920, 1080)
                 # zoom out to 80%
                 sb.driver.execute_script("document.body.style.zoom='80%'")
 
