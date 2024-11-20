@@ -1,20 +1,964 @@
-INFO:     Started server process [7490]
+INFO:     Started server process [49352]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-ERROR:    Traceback (most recent call last):
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 700, in lifespan
-    await receive()
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 174, in _sentry_receive
-    return await receive(*args, **kwargs)
+INFO:     127.0.0.1:57539 - "POST /api/v1/login/access-token HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 404, in _sentry_patched_asgi_app
+    return await middleware(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 161, in _run_asgi3
+    return await self._run_app(scope, receive, send, asgi_version=3)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 262, in _run_app
+    raise exc from None
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 257, in _run_app
+    return await self.app(
+           ^^^^^^^^^^^^^^^
+        scope, receive, _sentry_wrapped_send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 293, in _sentry_exceptionmiddleware_call
+    await old_call(self, scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 138, in _sentry_app
+    return await old_app(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/lifespan/on.py", line 137, in receive
-    return await self.receive_queue.get()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 214, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2441, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 943, in run
+    result = context.run(func, *args)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 94, in _sentry_call
+    return old_call(*args, **kwargs)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/api/routes/login.py", line 31, in login_access_token
+    user = crud.authenticate(
+        session=session, email=form_data.username, password=form_data.password
+    )
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 43, in authenticate
+    db_user = get_user_by_email(session=session, email=email)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 38, in get_user_by_email
+    session_user = session.exec(statement).first()
+                   ~~~~~~~~~~~~^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlmodel/orm/session.py", line 66, in exec
+    results = super().execute(
+        statement,
+    ...<4 lines>...
+        _add_event=_add_event,
+    )
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2237, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2106, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1189, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3278, in connect
+    return self._connection_cls(self)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 148, in __init__
+    Connection._handle_dbapi_exception_noconnection(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        err, dialect, engine
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2442, in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 146, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3302, in raw_connection
+    return self.pool.connect()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 449, in connect
+    return _ConnectionFairy._checkout(self)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 1263, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 179, in _do_get
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    return self._create_connection()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 390, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 900, in __connect
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/create.py", line 643, in connect
+    return dialect.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 621, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/psycopg/connection.py", line 119, in connect
+    raise last_ex.with_traceback(None)
+sqlalchemy.exc.OperationalError: (psycopg.OperationalError) connection failed: connection to server at "127.0.0.1", port 5432 failed: FATAL:  database "auto_clip_flow_db" does not exist
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+INFO:     127.0.0.1:57608 - "POST /api/v1/login/access-token HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 404, in _sentry_patched_asgi_app
+    return await middleware(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 161, in _run_asgi3
+    return await self._run_app(scope, receive, send, asgi_version=3)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 262, in _run_app
+    raise exc from None
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 257, in _run_app
+    return await self.app(
+           ^^^^^^^^^^^^^^^
+        scope, receive, _sentry_wrapped_send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 293, in _sentry_exceptionmiddleware_call
+    await old_call(self, scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 138, in _sentry_app
+    return await old_app(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/queues.py", line 186, in get
-    await getter
-asyncio.exceptions.CancelledError
-
-Sentry is attempting to send 2 pending events
-Waiting up to 2 seconds
-Press Ctrl-C to quit
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 214, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2441, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 943, in run
+    result = context.run(func, *args)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 94, in _sentry_call
+    return old_call(*args, **kwargs)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/api/routes/login.py", line 31, in login_access_token
+    user = crud.authenticate(
+        session=session, email=form_data.username, password=form_data.password
+    )
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 43, in authenticate
+    db_user = get_user_by_email(session=session, email=email)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 38, in get_user_by_email
+    session_user = session.exec(statement).first()
+                   ~~~~~~~~~~~~^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlmodel/orm/session.py", line 66, in exec
+    results = super().execute(
+        statement,
+    ...<4 lines>...
+        _add_event=_add_event,
+    )
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2237, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2106, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1189, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3278, in connect
+    return self._connection_cls(self)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 148, in __init__
+    Connection._handle_dbapi_exception_noconnection(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        err, dialect, engine
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2442, in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 146, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3302, in raw_connection
+    return self.pool.connect()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 449, in connect
+    return _ConnectionFairy._checkout(self)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 1263, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 179, in _do_get
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    return self._create_connection()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 390, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 900, in __connect
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/create.py", line 643, in connect
+    return dialect.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 621, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/psycopg/connection.py", line 119, in connect
+    raise last_ex.with_traceback(None)
+sqlalchemy.exc.OperationalError: (psycopg.OperationalError) connection failed: connection to server at "127.0.0.1", port 5432 failed: FATAL:  database "auto_clip_flow_db" does not exist
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+INFO:     127.0.0.1:57611 - "POST /api/v1/login/access-token HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 404, in _sentry_patched_asgi_app
+    return await middleware(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 161, in _run_asgi3
+    return await self._run_app(scope, receive, send, asgi_version=3)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 262, in _run_app
+    raise exc from None
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 257, in _run_app
+    return await self.app(
+           ^^^^^^^^^^^^^^^
+        scope, receive, _sentry_wrapped_send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 293, in _sentry_exceptionmiddleware_call
+    await old_call(self, scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 138, in _sentry_app
+    return await old_app(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 214, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2441, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 943, in run
+    result = context.run(func, *args)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 94, in _sentry_call
+    return old_call(*args, **kwargs)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/api/routes/login.py", line 31, in login_access_token
+    user = crud.authenticate(
+        session=session, email=form_data.username, password=form_data.password
+    )
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 43, in authenticate
+    db_user = get_user_by_email(session=session, email=email)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 38, in get_user_by_email
+    session_user = session.exec(statement).first()
+                   ~~~~~~~~~~~~^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlmodel/orm/session.py", line 66, in exec
+    results = super().execute(
+        statement,
+    ...<4 lines>...
+        _add_event=_add_event,
+    )
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2237, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2106, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1189, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3278, in connect
+    return self._connection_cls(self)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 148, in __init__
+    Connection._handle_dbapi_exception_noconnection(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        err, dialect, engine
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2442, in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 146, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3302, in raw_connection
+    return self.pool.connect()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 449, in connect
+    return _ConnectionFairy._checkout(self)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 1263, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 179, in _do_get
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    return self._create_connection()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 390, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 900, in __connect
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/create.py", line 643, in connect
+    return dialect.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 621, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/psycopg/connection.py", line 119, in connect
+    raise last_ex.with_traceback(None)
+sqlalchemy.exc.OperationalError: (psycopg.OperationalError) connection failed: connection to server at "127.0.0.1", port 5432 failed: FATAL:  database "auto_clip_flow_db" does not exist
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+INFO:     127.0.0.1:57614 - "POST /api/v1/login/access-token HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 404, in _sentry_patched_asgi_app
+    return await middleware(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 161, in _run_asgi3
+    return await self._run_app(scope, receive, send, asgi_version=3)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 262, in _run_app
+    raise exc from None
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 257, in _run_app
+    return await self.app(
+           ^^^^^^^^^^^^^^^
+        scope, receive, _sentry_wrapped_send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 293, in _sentry_exceptionmiddleware_call
+    await old_call(self, scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 138, in _sentry_app
+    return await old_app(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 214, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2441, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 943, in run
+    result = context.run(func, *args)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 94, in _sentry_call
+    return old_call(*args, **kwargs)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/api/routes/login.py", line 31, in login_access_token
+    user = crud.authenticate(
+        session=session, email=form_data.username, password=form_data.password
+    )
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 43, in authenticate
+    db_user = get_user_by_email(session=session, email=email)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 38, in get_user_by_email
+    session_user = session.exec(statement).first()
+                   ~~~~~~~~~~~~^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlmodel/orm/session.py", line 66, in exec
+    results = super().execute(
+        statement,
+    ...<4 lines>...
+        _add_event=_add_event,
+    )
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2237, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2106, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1189, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3278, in connect
+    return self._connection_cls(self)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 148, in __init__
+    Connection._handle_dbapi_exception_noconnection(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        err, dialect, engine
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2442, in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 146, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3302, in raw_connection
+    return self.pool.connect()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 449, in connect
+    return _ConnectionFairy._checkout(self)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 1263, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 179, in _do_get
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    return self._create_connection()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 390, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 900, in __connect
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/create.py", line 643, in connect
+    return dialect.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 621, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/psycopg/connection.py", line 119, in connect
+    raise last_ex.with_traceback(None)
+sqlalchemy.exc.OperationalError: (psycopg.OperationalError) connection failed: connection to server at "127.0.0.1", port 5432 failed: FATAL:  database "auto_clip_flow_db" does not exist
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+INFO:     127.0.0.1:57619 - "POST /api/v1/login/access-token HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 404, in _sentry_patched_asgi_app
+    return await middleware(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 161, in _run_asgi3
+    return await self._run_app(scope, receive, send, asgi_version=3)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 262, in _run_app
+    raise exc from None
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/asgi.py", line 257, in _run_app
+    return await self.app(
+           ^^^^^^^^^^^^^^^
+        scope, receive, _sentry_wrapped_send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 293, in _sentry_exceptionmiddleware_call
+    await old_call(self, scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/starlette.py", line 195, in _create_span_call
+    return await old_call(app, scope, new_receive, new_send, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 138, in _sentry_app
+    return await old_app(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/fastapi/routing.py", line 214, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/starlette/concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2441, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 943, in run
+    result = context.run(func, *args)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sentry_sdk/integrations/fastapi.py", line 94, in _sentry_call
+    return old_call(*args, **kwargs)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/api/routes/login.py", line 31, in login_access_token
+    user = crud.authenticate(
+        session=session, email=form_data.username, password=form_data.password
+    )
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 43, in authenticate
+    db_user = get_user_by_email(session=session, email=email)
+  File "/Users/bibektimilsina/projects/automation/auto_clip_flow/app/crud.py", line 38, in get_user_by_email
+    session_user = session.exec(statement).first()
+                   ~~~~~~~~~~~~^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlmodel/orm/session.py", line 66, in exec
+    results = super().execute(
+        statement,
+    ...<4 lines>...
+        _add_event=_add_event,
+    )
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2362, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2237, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 2106, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in _connection_for_bind
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/orm/session.py", line 1189, in _connection_for_bind
+    conn = bind.connect()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3278, in connect
+    return self._connection_cls(self)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 148, in __init__
+    Connection._handle_dbapi_exception_noconnection(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        err, dialect, engine
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 2442, in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 146, in __init__
+    self._dbapi_connection = engine.raw_connection()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/base.py", line 3302, in raw_connection
+    return self.pool.connect()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 449, in connect
+    return _ConnectionFairy._checkout(self)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 1263, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 179, in _do_get
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/impl.py", line 177, in _do_get
+    return self._create_connection()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 390, in _create_connection
+    return _ConnectionRecord(self)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 900, in __connect
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/create.py", line 643, in connect
+    return dialect.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/sqlalchemy/engine/default.py", line 621, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/psycopg/connection.py", line 119, in connect
+    raise last_ex.with_traceback(None)
+sqlalchemy.exc.OperationalError: (psycopg.OperationalError) connection failed: connection to server at "127.0.0.1", port 5432 failed: FATAL:  database "auto_clip_flow_db" does not exist
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
