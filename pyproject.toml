@@ -10,6 +10,7 @@ dependencies = [
     "bcrypt>=5.0.0",
     "celery>=5.5.3",
     "colorlog>=6.10.1",
+    "email-validator>=2.3.0",
     "emails>=0.6",
     "fake-useragent>=2.2.0",
     "fastapi>=0.119.0",
