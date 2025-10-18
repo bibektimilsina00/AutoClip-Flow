@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoClip Flow - Automation</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<body class="bg-slate-900 min-h-screen">
+    {% raw %}
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="bg-slate-900 border-b border-white/10 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <a href="/dashboard" class="flex items-center gap-3 text-white">
+                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                            <i class="fas fa-video text-white"></i>
+                        </div>
+                        <span class="text-xl font-semibold">AutoClip Flow</span>
+                    </a>
+                    <div class="flex items-center gap-8">
+                        <a href="/dashboard" class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                        <a href="/accounts" class="text-gray-300 hover:text-white transition-colors">Accounts</a>
+                        <a href="/automation" class="text-white border-b-2 border-blue-500 pb-1">Automation</a>
+                        <a href="/users" class="text-gray-300 hover:text-white transition-colors">Users</a>
+                        <button @click="logout"
+                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-white">Automation Control</h1>
+                <div class="flex gap-3">
+                    <button @click="automationRunning ? stopAutomation() : startAutomation()"
+                        :class="automationRunning ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
+                        class="px-6 py-3 text-white rounded-lg transition-colors">
+                        <i :class="automationRunning ? 'fas fa-stop' : 'fas fa-play'" class="mr-2"></i>
+                        {{ automationRunning ? 'Stop' : 'Start' }} Automation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-3xl font-bold text-white">{{ tasks.length }}</div>
+                            <div class="text-gray-400 text-sm">Total Tasks</div>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tasks text-blue-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-3xl font-bold text-white">{{ runningTasks }}</div>
+                            <div class="text-gray-400 text-sm">Running</div>
+                        </div>
+                        <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-play-circle text-green-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-3xl font-bold text-white">{{ completedTasks }}</div>
+                            <div class="text-gray-400 text-sm">Completed</div>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-check-circle text-purple-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task History -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Task History</h2>
+                    <button @click="clearTasks"
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                        <i class="fas fa-trash mr-2"></i>Clear All Tasks
+                    </button>
+                </div>
+
+                <div v-if="tasks.length === 0" class="text-center py-12">
+                    <i class="fas fa-list text-4xl text-gray-500 mb-4"></i>
+                    <p class="text-gray-400">No tasks found. Start automation to see task history.</p>
+                </div>
+
+                <div v-else class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-3 text-gray-300">Account</th>
+                                <th class="text-left py-3 text-gray-300">Task ID</th>
+                                <th class="text-left py-3 text-gray-300">Status</th>
+                                <th class="text-left py-3 text-gray-300">Progress</th>
+                                <th class="text-left py-3 text-gray-300">Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="task in tasks" :key="task.task_id" class="border-b border-white/5">
+                                <td class="py-3 text-white">{{ task.account_id }}</td>
+                                <td class="py-3 text-white">{{ task.task_id.slice(-8) }}</td>
+                                <td class="py-3">
+                                    <span :class="getStatusClass(task.status)"
+                                        class="px-3 py-1 rounded-full text-xs font-medium">
+                                        {{ task.status }}
+                                    </span>
+                                </td>
+                                <td class="py-3">
+                                    <div class="w-full bg-gray-700 rounded-full h-2">
+                                        <div :class="getProgressClass(task.status)"
+                                            class="h-2 rounded-full transition-all duration-300"
+                                            :style="{ width: task.status === 'SUCCESS' ? '100%' : '50%' + '%' }">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3 text-gray-300">{{ formatDate(task.created_at) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endraw %}
+
+            <script>
+                const token = localStorage.getItem('access_token')
+                const api = axios.create({ baseURL: '/api/v1', headers: token ? { Authorization: `Bearer ${token}` } : {} })
+
+                const AutomationApp = {
+                    data() {
+                        return {
+                            tasks: [],
+                            automationRunning: false
+                        }
+                    },
+                    computed: {
+                        runningTasks() {
+                            return this.tasks.filter(t => t.status === 'STARTED' || t.status === 'PROCESSING').length
+                        },
+                        completedTasks() {
+                            return this.tasks.filter(t => t.status === 'SUCCESS').length
+                        }
+                    },
+                    created() {
+                        this.fetchTasks()
+                    },
+                    methods: {
+                        async fetchTasks() {
+                            try {
+                                const res = await api.get('/automation/automation_status/')
+                                this.tasks = res.data || []
+                                this.automationRunning = this.runningTasks > 0
+                            } catch (err) {
+                                console.error('Failed to fetch tasks', err)
+                            }
+                        },
+                        async startAutomation() {
+                            try {
+                                await api.post('/automation/start_automation')
+                                this.automationRunning = true
+                                setTimeout(() => this.fetchTasks(), 1000)
+                            } catch (err) {
+                                alert('Failed to start automation')
+                            }
+                        },
+                        async stopAutomation() {
+                            try {
+                                await api.post('/automation/stop_automation')
+                                this.automationRunning = false
+                                setTimeout(() => this.fetchTasks(), 1000)
+                            } catch (err) {
+                                alert('Failed to stop automation')
+                            }
+                        },
+                        async clearTasks() {
+                            if (confirm('Clear all tasks? This cannot be undone.')) {
+                                try {
+                                    await api.delete('/automation/delete_all_user_tasks')
+                                    this.tasks = []
+                                } catch (err) {
+                                    alert('Failed to clear tasks')
+                                }
+                            }
+                        },
+                        getStatusClass(status) {
+                            switch (status) {
+                                case 'SUCCESS': return 'bg-green-600/20 text-green-400'
+                                case 'FAILED': return 'bg-red-600/20 text-red-400'
+                                case 'STARTED': case 'PROCESSING': return 'bg-yellow-600/20 text-yellow-400'
+                                default: return 'bg-gray-600/20 text-gray-400'
+                            }
+                        },
+                        getProgressClass(status) {
+                            switch (status) {
+                                case 'SUCCESS': return 'bg-green-500'
+                                case 'FAILED': return 'bg-red-500'
+                                default: return 'bg-yellow-500'
+                            }
+                        },
+                        formatDate(d) { return d ? new Date(d).toLocaleString() : '' },
+                        logout() { localStorage.removeItem('access_token'); window.location.href = '/'; }
+                    }
+                }
+
+                Vue.createApp(AutomationApp).mount('#app')
+            </script>
+</body>
+
+</html>

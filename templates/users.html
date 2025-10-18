@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoClip Flow - Users</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+    </style>
+</head>
+
+<body>
+    {% raw %}
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="bg-slate-900 border-b border-white/10 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <a href="/dashboard" class="flex items-center gap-3 text-white">
+                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                            <i class="fas fa-video text-white"></i>
+                        </div>
+                        <span class="text-xl font-semibold">AutoClip Flow</span>
+                    </a>
+                    <div class="flex items-center gap-8">
+                        <a href="/dashboard" class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                        <a href="/accounts" class="text-gray-300 hover:text-white transition-colors">Accounts</a>
+                        <a href="/automation" class="text-gray-300 hover:text-white transition-colors">Automation</a>
+                        <a href="/users" class="text-white border-b-2 border-blue-500 pb-1">Users</a>
+                        <button @click="logout"
+                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-white">User Management</h1>
+                <button @click="showAddModal = true" class="px-4 py-2 bg-sky-600 text-white rounded-lg">
+                    <i class="fas fa-plus mr-2"></i>Add User
+                </button>
+            </div>
+
+            <div v-if="loading" class="text-center py-12">
+                <div class="loader mx-auto"></div>
+                <p class="mt-4 text-gray-400">Loading users...</p>
+            </div>
+
+            <div v-else class="bg-white/5 border border-white/10 rounded-2xl p-8">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-white/10">
+                            <th class="text-left py-3 text-gray-300">Email</th>
+                            <th class="text-left py-3 text-gray-300">Full Name</th>
+                            <th class="text-left py-3 text-gray-300">Superuser</th>
+                            <th class="text-left py-3 text-gray-300">Active</th>
+                            <th class="text-left py-3 text-gray-300">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="user in users" :key="user.id" class="border-b border-white/5">
+                            <td class="py-3 text-white">{{ user.email }}</td>
+                            <td class="py-3 text-white">{{ user.full_name }}</td>
+                            <td class="py-3">
+                                <span
+                                    :class="user.is_superuser ? 'bg-green-600/20 text-green-400' : 'bg-gray-600/20 text-gray-400'"
+                                    class="px-3 py-1 rounded-full text-xs font-medium">
+                                    {{ user.is_superuser ? 'Yes' : 'No' }}
+                                </span>
+                            </td>
+                            <td class="py-3">
+                                <span
+                                    :class="user.is_active ? 'bg-green-600/20 text-green-400' : 'bg-red-600/20 text-red-400'"
+                                    class="px-3 py-1 rounded-full text-xs font-medium">
+                                    {{ user.is_active ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
+                            <td class="py-3">
+                                <button @click="editUser(user)"
+                                    class="w-8 h-8 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 flex items-center justify-center transition-colors mr-2">
+                                    <i class="fas fa-edit text-blue-400"></i>
+                                </button>
+                                <button @click="deleteUser(user)"
+                                    class="w-8 h-8 rounded-lg bg-red-600/20 hover:bg-red-600/30 flex items-center justify-center transition-colors">
+                                    <i class="fas fa-trash text-red-400"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Test Email Section -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-8 mt-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Test Email</h2>
+                <form @submit.prevent="sendTestEmail" class="flex gap-4">
+                    <input type="email" v-model="testEmail" placeholder="Enter email address" required
+                        class="flex-1 px-4 py-3 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400">
+                    <button type="submit" :disabled="emailLoading"
+                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span v-if="emailLoading" class="loader mr-2"></span>
+                        Send Test Email
+                    </button>
+                </form>
+                <div v-if="emailMessage" class="mt-4 p-4 rounded-lg"
+                    :class="emailMessageType === 'success' ? 'bg-green-600/20 text-green-400' : 'bg-red-600/20 text-red-400'">
+                    {{ emailMessage }}
+                </div>
+            </div>
+
+            <!-- Add/Edit Modal -->
+            <div v-if="showAddModal || showEditModal"
+                class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+                <div class="bg-white/5 border border-white/10 rounded-2xl max-w-md w-full p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h5 class="text-xl font-semibold text-white">{{ showEditModal ? 'Edit User' : 'Add User' }}</h5>
+                        <button @click="closeModal" class="text-gray-400 hover:text-white transition-colors">✕</button>
+                    </div>
+                    <form @submit.prevent="saveUser" class="space-y-4">
+                        <div>
+                            <label class="text-sm text-gray-300">Email</label>
+                            <input type="email" v-model="userForm.email" required
+                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-300">Full Name</label>
+                            <input type="text" v-model="userForm.full_name" required
+                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-300">Password</label>
+                            <input type="password" v-model="userForm.password" :required="!showEditModal"
+                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 text-gray-300">
+                                <input type="checkbox" v-model="userForm.is_active" class="rounded"> Active
+                            </label>
+                            <label class="flex items-center gap-2 text-gray-300">
+                                <input type="checkbox" v-model="userForm.is_superuser" class="rounded"> Superuser
+                            </label>
+                        </div>
+                        <button type="submit"
+                            class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">{{
+                            showEditModal ?
+                            'Update' : 'Add' }} User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endraw %}
+
+        <script>
+            const token = localStorage.getItem('access_token')
+            const api = axios.create({ baseURL: '/api/v1', headers: token ? { Authorization: `Bearer ${token}` } : {} })
+
+            const UsersApp = {
+                data() {
+                    return {
+                        users: [],
+                        loading: true,
+                        showAddModal: false,
+                        showEditModal: false,
+                        userForm: { email: '', full_name: '', password: '', is_active: true, is_superuser: false },
+                        editingId: null,
+                        testEmail: '',
+                        emailLoading: false,
+                        emailMessage: '',
+                        emailMessageType: ''
+                    }
+                },
+                created() {
+                    this.fetchUsers()
+                },
+                methods: {
+                    async fetchUsers() {
+                        try {
+                            const res = await api.get('/users/')
+                            this.users = res.data.data || res.data
+                        } catch (err) {
+                            alert('Failed to load users')
+                        } finally {
+                            this.loading = false
+                        }
+                    },
+                    editUser(user) {
+                        this.userForm = { ...user, password: '' }
+                        this.editingId = user.id
+                        this.showEditModal = true
+                    },
+                    closeModal() {
+                        this.showAddModal = false
+                        this.showEditModal = false
+                        this.userForm = { email: '', full_name: '', password: '', is_active: true, is_superuser: false }
+                        this.editingId = null
+                    },
+                    async saveUser() {
+                        try {
+                            if (this.showEditModal) {
+                                const updateData = { ...this.userForm }
+                                if (!updateData.password) delete updateData.password
+                                await api.patch(`/users/${this.editingId}`, updateData)
+                            } else {
+                                await api.post('/users/', this.userForm)
+                            }
+                            this.closeModal()
+                            this.fetchUsers()
+                        } catch (err) {
+                            alert('Failed to save user')
+                        }
+                    },
+                    async deleteUser(user) {
+                        if (confirm('Delete this user?')) {
+                            try {
+                                await api.delete(`/users/${user.id}`)
+                                this.fetchUsers()
+                            } catch (err) {
+                                alert('Failed to delete user')
+                            }
+                        }
+                    },
+                    async sendTestEmail() {
+                        this.emailLoading = true
+                        this.emailMessage = ''
+                        try {
+                            const response = await api.post('/utils/test-email/', { email_to: this.testEmail })
+                            this.emailMessage = response.data.message
+                            this.emailMessageType = 'success'
+                            this.testEmail = ''
+                        } catch (err) {
+                            this.emailMessage = err.response?.data?.detail || 'Failed to send test email'
+                            this.emailMessageType = 'error'
+                        } finally {
+                            this.emailLoading = false
+                        }
+                    },
+                    logout() { localStorage.removeItem('access_token'); window.location.href = '/'; }
+                }
+            }
+
+            Vue.createApp(UsersApp).mount('#app')
+        </script>
+</body>
+
+</html>

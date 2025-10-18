@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoClip Flow - Home</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+    </style>
+</head>
+
+<body>
+    {% raw %}
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="bg-slate-900 border-b border-white/10 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <a href="/" class="flex items-center gap-3 text-white">
+                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                            <i class="fas fa-video text-white"></i>
+                        </div>
+                        <span class="text-xl font-semibold">AutoClip Flow</span>
+                    </a>
+                    <div class="flex items-center gap-8">
+                        <a href="/" class="text-white border-b-2 border-blue-500 pb-1">Home</a>
+                        <a v-if="isLoggedIn" href="/dashboard"
+                            class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                        <a v-if="isLoggedIn" href="/accounts"
+                            class="text-gray-300 hover:text-white transition-colors">Accounts</a>
+                        <a v-if="isLoggedIn" href="/automation"
+                            class="text-gray-300 hover:text-white transition-colors">Automation</a>
+                        <a v-if="isLoggedIn" href="/users"
+                            class="text-gray-300 hover:text-white transition-colors">Users</a>
+                        <a v-if="!isLoggedIn" href="/login"
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                            Login
+                        </a>
+                        <button v-if="isLoggedIn" @click="logout"
+                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="py-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div
+                            class="inline-flex items-center gap-2 bg-blue-600/20 text-blue-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                            <i class="fas fa-rocket"></i>
+                            <span>AI-Powered Automation</span>
+                        </div>
+                        <h1 class="text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
+                            Automate Your <span
+                                class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Video
+                                Workflow</span>
+                        </h1>
+                        <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                            Streamline your content creation with intelligent automation. Extract, process and organize
+                            video clips automatically from YouTube, Instagram, TikTok, and more platforms in minutes.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                            <a href="/signup"
+                                class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg transition-colors text-lg font-semibold">
+                                <i class="fas fa-user-plus"></i> Start Free Trial
+                            </a>
+                            <a href="#features"
+                                class="inline-flex items-center justify-center gap-2 border border-white/20 text-white hover:bg-white/5 px-8 py-4 rounded-lg transition-colors text-lg">
+                                <i class="fas fa-play"></i> Watch Demo
+                            </a>
+                        </div>
+                        <div class="flex items-center gap-6 text-sm text-gray-400">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-400"></i>
+                                <span>No credit card required</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check text-green-400"></i>
+                                <span>14-day free trial</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="relative">
+                            <div
+                                class="w-80 h-80 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-3xl flex items-center justify-center backdrop-blur-sm border border-white/10">
+                                <div class="w-64 h-64 bg-white/5 rounded-2xl flex items-center justify-center">
+                                    <i class="fas fa-play-circle text-6xl text-blue-400 opacity-80"></i>
+                                </div>
+                            </div>
+                            <div
+                                class="absolute -top-4 -right-4 w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-2xl text-green-400"></i>
+                            </div>
+                            <div
+                                class="absolute -bottom-4 -left-4 w-20 h-20 bg-purple-500/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-bolt text-2xl text-purple-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-4">Powerful Features for Content Creators</h2>
+                    <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                        Everything you need to automate your video workflow, from extraction to distribution
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                    <div class="bg-white/5 border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                        <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-robot text-blue-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">AI-Powered Automation</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Intelligent algorithms automatically detect and extract the most engaging video segments. No
+                            manual editing required - our AI understands content quality and viewer engagement.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                        <div class="w-14 h-14 bg-green-600/20 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-cloud-upload-alt text-green-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Cloud Storage Integration</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Seamless integration with Google Drive, Dropbox, and other cloud storage providers.
+                            Automatically organize and backup your processed clips with smart folder structures.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                        <div class="w-14 h-14 bg-purple-600/20 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-chart-line text-purple-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Real-time Analytics</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Track performance with comprehensive analytics. Monitor processing times, success rates, and
+                            content engagement metrics across all your automated workflows.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                        <div class="w-14 h-14 bg-orange-600/20 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-globe text-orange-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Multi-Platform Support</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Extract content from YouTube, Instagram, TikTok, Vimeo, and more. Our platform adapts to
+                            each platform's unique requirements and content formats.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                        <div class="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-shield-alt text-red-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Enterprise Security</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Bank-level encryption and secure API connections. Your content and credentials are protected
+                            with industry-standard security protocols and compliance measures.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-8 rounded-2xl hover:bg-white/10 transition-colors">
+                        <div class="w-14 h-14 bg-teal-600/20 rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-cogs text-teal-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Custom Workflows</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Build custom automation workflows with our visual workflow builder. Combine multiple
+                            actions, set conditions, and create complex processing pipelines.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Stats Section -->
+                <div class="bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-white/10 rounded-3xl p-12">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                        <div>
+                            <div class="text-4xl font-bold text-white mb-2">10M+</div>
+                            <div class="text-gray-400">Videos Processed</div>
+                        </div>
+                        <div>
+                            <div class="text-4xl font-bold text-white mb-2">50K+</div>
+                            <div class="text-gray-400">Active Users</div>
+                        </div>
+                        <div>
+                            <div class="text-4xl font-bold text-white mb-2">99.9%</div>
+                            <div class="text-gray-400">Uptime</div>
+                        </div>
+                        <div>
+                            <div class="text-4xl font-bold text-white mb-2">24/7</div>
+                            <div class="text-gray-400">Support</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="py-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-4">How It Works</h2>
+                    <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                        Get started in minutes with our simple 3-step process
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div
+                            class="w-20 h-20 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-2xl font-bold text-blue-400">1</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Connect Your Accounts</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Link your social media accounts and cloud storage. Our secure API connections ensure your
+                            data stays protected while enabling seamless automation.
+                        </p>
+                    </div>
+
+                    <div class="text-center">
+                        <div
+                            class="w-20 h-20 bg-green-600/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-2xl font-bold text-green-400">2</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Set Up Workflows</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Choose from pre-built templates or create custom workflows. Define your content sources,
+                            processing rules, and output destinations with our intuitive interface.
+                        </p>
+                    </div>
+
+                    <div class="text-center">
+                        <div
+                            class="w-20 h-20 bg-purple-600/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-2xl font-bold text-purple-400">3</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Automate & Monitor</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Sit back and watch the magic happen. Monitor progress in real-time, receive notifications,
+                            and access your processed content instantly from anywhere.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="py-20 bg-slate-800/50">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-4">Trusted by Content Creators</h2>
+                    <p class="text-xl text-gray-400">See what our users are saying</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white/5 border border-white/10 p-8 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-blue-600/20 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-blue-400 font-semibold">SJ</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-semibold">Sarah Johnson</div>
+                                <div class="text-gray-400 text-sm">Content Creator</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 italic">
+                            "AutoClip Flow has transformed my content workflow. What used to take hours now happens
+                            automatically. The quality of extracted clips is incredible!"
+                        </p>
+                        <div class="flex text-yellow-400 mt-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-8 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-600/20 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-green-400 font-semibold">MR</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-semibold">Mike Rodriguez</div>
+                                <div class="text-gray-400 text-sm">Digital Marketing Agency</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 italic">
+                            "The ROI on AutoClip Flow has been phenomenal. We've reduced our video processing time by
+                            80% and our clients love the faster turnaround."
+                        </p>
+                        <div class="flex text-yellow-400 mt-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-8 rounded-2xl">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-purple-600/20 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-purple-400 font-semibold">AL</span>
+                            </div>
+                            <div>
+                                <div class="text-white font-semibold">Alex Lee</div>
+                                <div class="text-gray-400 text-sm">YouTube Creator</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 italic">
+                            "Finally, a tool that understands video content! The AI is smart enough to pick the best
+                            moments, and the automation saves me countless hours."
+                        </p>
+                        <div class="flex text-yellow-400 mt-4">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-20">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold text-white mb-4">Ready to Transform Your Content Workflow?</h2>
+                <p class="text-xl text-gray-300 mb-8">
+                    Join thousands of content creators who have automated their video processing
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                    <a href="/signup"
+                        class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg transition-colors text-lg font-semibold">
+                        <i class="fas fa-rocket"></i> Start Your Free Trial
+                    </a>
+                    <a href="/login"
+                        class="inline-flex items-center justify-center gap-2 border border-white/20 text-white hover:bg-white/5 px-8 py-4 rounded-lg transition-colors text-lg">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="flex items-center justify-center gap-2 text-gray-400">
+                        <i class="fas fa-check text-green-400"></i>
+                        <span>14-day free trial</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-2 text-gray-400">
+                        <i class="fas fa-check text-green-400"></i>
+                        <span>No credit card required</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-2 text-gray-400">
+                        <i class="fas fa-check text-green-400"></i>
+                        <span>Cancel anytime</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-20 bg-slate-800/50">
+            <div class="max-w-4xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-4">Frequently Asked Questions</h2>
+                    <p class="text-xl text-gray-400">Everything you need to know about AutoClip Flow</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+                        <h3 class="text-lg font-semibold text-white mb-3">How does the AI know which video segments to
+                            extract?</h3>
+                        <p class="text-gray-300">Our AI analyzes video content using advanced computer vision and audio
+                            processing algorithms. It identifies engaging moments based on visual interest, audio peaks,
+                            and content relevance patterns learned from millions of videos.</p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+                        <h3 class="text-lg font-semibold text-white mb-3">Is my data and content secure?</h3>
+                        <p class="text-gray-300">Absolutely. We use bank-level encryption for all data transmission and
+                            storage. Your social media credentials are encrypted and never stored in plain text. We
+                            comply with GDPR and SOC 2 security standards.</p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+                        <h3 class="text-lg font-semibold text-white mb-3">Which platforms do you support?</h3>
+                        <p class="text-gray-300">We currently support YouTube, Instagram, TikTok, Vimeo, and Facebook.
+                            We're constantly adding support for new platforms based on user demand. Contact us if you
+                            need support for a specific platform.</p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+                        <h3 class="text-lg font-semibold text-white mb-3">Can I customize the automation workflows?</h3>
+                        <p class="text-gray-300">Yes! Our platform offers both pre-built templates and a visual workflow
+                            builder. You can customize extraction rules, output formats, storage destinations, and
+                            create complex multi-step automation pipelines.</p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+                        <h3 class="text-lg font-semibold text-white mb-3">What's included in the free trial?</h3>
+                        <p class="text-gray-300">The 14-day free trial includes full access to all features, unlimited
+                            video processing, and priority support. No credit card required. You can process up to 100
+                            videos during the trial period.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-slate-900 border-t border-white/10 py-16">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <!-- Company Info -->
+                    <div class="md:col-span-2">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center">
+                                <i class="fas fa-video text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-white text-xl">AutoClip Flow</div>
+                                <div class="text-gray-400">Automate your video clipping workflow</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 mb-6 max-w-md">
+                            The most advanced AI-powered platform for automated video content extraction and processing.
+                            Trusted by content creators worldwide.
+                        </p>
+                        <div class="flex gap-4">
+                            <a href="#"
+                                class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-colors">
+                                <i class="fab fa-twitter text-gray-400"></i>
+                            </a>
+                            <a href="#"
+                                class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-colors">
+                                <i class="fab fa-linkedin text-gray-400"></i>
+                            </a>
+                            <a href="#"
+                                class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-colors">
+                                <i class="fab fa-youtube text-gray-400"></i>
+                            </a>
+                            <a href="#"
+                                class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-colors">
+                                <i class="fab fa-discord text-gray-400"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Product -->
+                    <div>
+                        <h4 class="font-semibold text-white mb-4">Product</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#features"
+                                    class="text-gray-400 hover:text-white transition-colors">Features</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">API Docs</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Integrations</a>
+                            </li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Status</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Support -->
+                    <div>
+                        <h4 class="font-semibold text-white mb-4">Support</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Help Center</a>
+                            </li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Community</a></li>
+                            <li><a href="/login" class="text-gray-400 hover:text-white transition-colors">Sign In</a>
+                            </li>
+                            <li><a href="/signup" class="text-gray-400 hover:text-white transition-colors">Sign Up</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="text-gray-400 text-sm">
+                        &copy; 2025 AutoClip Flow. All rights reserved.
+                    </div>
+                    <div class="flex gap-6 text-sm">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script>
+        // Simple global state hook for login status (reads token from localStorage)
+        const App = {
+            data() {
+                return { isLoggedIn: !!localStorage.getItem('access_token') }
+            },
+            methods: {
+                logout() { localStorage.removeItem('access_token'); this.isLoggedIn = false; window.location.href = '/'; }
+            }
+        }
+        Vue.createApp(App).mount('#app')
+    </script>
+    {% endraw %}
+</body>
+
+</html>

@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, List, Optional
 from pydantic import EmailStr
 
 from app.models.user_model import Field, Relationship, SQLModel
+from automation.enums.platform import Platform
 
 if TYPE_CHECKING:
     from models.task_model import UserTask
@@ -16,7 +17,12 @@ class AccountBase(SQLModel):
     name: str = Field(min_length=1, max_length=255)
     email: EmailStr = Field(index=True, unique=True, max_length=255)
     google_drive_folder_id: str = Field(max_length=255)
-    platforms: str = Field(max_length=255)  # Comma-separated string for platforms
+    platform: Platform = Field(default=Platform.TIKTOK)
+    # Facebook-specific optional settings
+    facebook_page_id: Optional[str] = Field(default=None, max_length=255)
+    facebook_group_id: Optional[str] = Field(default=None, max_length=255)
+    facebook_post_to_page: Optional[bool] = Field(default=False)
+    facebook_post_to_group: Optional[bool] = Field(default=False)
 
 
 # Properties to receive on account creation
@@ -30,7 +36,7 @@ class AccountUpdate(SQLModel):
     name: Optional[str] = Field(default=None, min_length=1, max_length=255)
     email: Optional[EmailStr] = Field(default=None, max_length=255)
     google_drive_folder_id: Optional[str] = Field(default=None, max_length=255)
-    platforms: Optional[str] = Field(default=None, max_length=255)
+    platform: Optional[Platform] = Field(default=None)
     password: Optional[str] = Field(default=None, min_length=8, max_length=40)
 
 

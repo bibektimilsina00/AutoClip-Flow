@@ -49,7 +49,22 @@ def process_task(self, task_id: str):
             )
 
             app = MainApp(user_task.user_id)
-            platforms = account.platforms.split(",")
+            # Support both legacy 'platforms' CSV and new single 'platform' enum field
+            if hasattr(account, "platforms") and account.platforms:
+                platforms = account.platforms.split(",")
+            else:
+                # account.platform may be an enum or a string
+                p = getattr(account, "platform", None)
+                if p is None:
+                    platforms = []
+                elif isinstance(p, str):
+                    platforms = [p]
+                else:
+                    # Enum value
+                    try:
+                        platforms = [p.name.lower()]
+                    except Exception:
+                        platforms = [str(p).lower()]
 
             options = sb_utils.get_undetectable_options()
 
@@ -71,6 +86,7 @@ def process_task(self, task_id: str):
                         account.email,
                         account.password,
                         platforms,
+                        account,
                     )
 
                     sb_utils.random_delay()

@@ -13,8 +13,21 @@ from app.models.account_model import (
     AccountUpdate,
 )
 from app.models.user_model import Message
+from automation.enums.platform import Platform
 
 router = APIRouter()
+
+
+@router.get("/platforms")
+def get_platforms() -> Any:
+    """
+    Get available platform choices.
+    """
+    platforms = [
+        {"value": platform.name.lower(), "label": platform.name.title()}
+        for platform in Platform
+    ]
+    return {"platforms": platforms}
 
 
 @router.get("/", response_model=AccountsPublic)

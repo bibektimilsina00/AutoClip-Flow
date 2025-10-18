@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoClip Flow - Dashboard</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-slate-900 min-h-screen">
+    {% raw %}
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="bg-slate-900 border-b border-white/10 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <a href="/dashboard" class="flex items-center gap-3 text-white">
+                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                            <i class="fas fa-video text-white"></i>
+                        </div>
+                        <span class="text-xl font-semibold">AutoClip Flow</span>
+                    </a>
+                    <div class="flex items-center gap-8">
+                        <a href="/dashboard" class="text-white border-b-2 border-blue-500 pb-1">Dashboard</a>
+                        <a href="/accounts" class="text-gray-300 hover:text-white transition-colors">Accounts</a>
+                        <a href="/automation" class="text-gray-300 hover:text-white transition-colors">Automation</a>
+                        <a href="/users" class="text-gray-300 hover:text-white transition-colors">Users</a>
+                        <button @click="logout"
+                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <!-- Welcome Section -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold text-white mb-2">Welcome back, {{ user.full_name || 'User' }}!
+                        </h1>
+                        <p class="text-gray-300">Here's what's happening with your automation today</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button @click="startAutomation"
+                            class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium">
+                            <i class="fas fa-play mr-2"></i>Start
+                        </button>
+                        <button @click="stopAutomation"
+                            class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium">
+                            <i class="fas fa-stop mr-2"></i>Stop
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1">{{ stats.accounts }}</div>
+                            <div class="text-gray-400 text-sm">Total Accounts</div>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-users text-blue-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1">{{ stats.tasks }}</div>
+                            <div class="text-gray-400 text-sm">Total Tasks</div>
+                        </div>
+                        <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tasks text-green-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1">{{ stats.running }}</div>
+                            <div class="text-gray-400 text-sm">Running Tasks</div>
+                        </div>
+                        <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-play-circle text-yellow-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1">{{ stats.completed }}</div>
+                            <div class="text-gray-400 text-sm">Completed</div>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-check-circle text-purple-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Tasks -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-8 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Recent Tasks</h2>
+                    <a href="/automation"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                        View All <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+
+                <div v-if="recentTasks.length === 0" class="text-center py-12">
+                    <i class="fas fa-inbox text-4xl text-gray-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-white mb-2">No tasks yet</h3>
+                    <p class="text-gray-400 mb-6">Start your automation to see tasks appear here</p>
+                    <a href="/automation"
+                        class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                        Start Automation <i class="fas fa-rocket ml-2"></i>
+                    </a>
+                </div>
+
+                <div v-else class="space-y-3">
+                    <div v-for="task in recentTasks.slice(0, 5)" :key="task.id"
+                        class="bg-white/5 border border-white/10 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4 flex-1">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+                                    :class="getStatusBgColor(task.status)">
+                                    <i :class="getStatusIcon(task.status)"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-medium text-white">{{ task.title || 'Task ' + task.id.slice(-8) }}
+                                    </h3>
+                                    <p class="text-sm text-gray-400">{{ formatDate(task.created_at) }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="text-right">
+                                    <div class="text-sm font-medium text-white">{{ task.progress }}%</div>
+                                    <div class="text-xs text-gray-400">Progress</div>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-sm font-medium"
+                                    :class="getStatusClass(task.status)">
+                                    {{ task.status }}
+                                </span>
+                                <button @click="viewTask(task)"
+                                    class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+                                    <i class="fas fa-eye text-gray-300"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-8">
+                <h2 class="text-2xl font-bold text-white mb-6">Quick Actions</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <button @click="goToAccounts"
+                        class="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors text-center">
+                        <i class="fas fa-plus-circle text-3xl text-blue-400 mb-3"></i>
+                        <h3 class="font-medium text-white text-lg mb-1">Add Account</h3>
+                        <p class="text-sm text-gray-400">Connect new platform</p>
+                    </button>
+
+                    <button @click="startAutomation"
+                        class="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors text-center">
+                        <i class="fas fa-play-circle text-3xl text-green-400 mb-3"></i>
+                        <h3 class="font-medium text-white text-lg mb-1">Start Automation</h3>
+                        <p class="text-sm text-gray-400">Begin processing</p>
+                    </button>
+
+                    <button @click="stopAutomation"
+                        class="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors text-center">
+                        <i class="fas fa-stop-circle text-3xl text-red-400 mb-3"></i>
+                        <h3 class="font-medium text-white text-lg mb-1">Stop Automation</h3>
+                        <p class="text-sm text-gray-400">Pause all tasks</p>
+                    </button>
+
+                    <button @click="goToReports"
+                        class="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-colors text-center">
+                        <i class="fas fa-chart-bar text-3xl text-purple-400 mb-3"></i>
+                        <h3 class="font-medium text-white text-lg mb-1">View Reports</h3>
+                        <p class="text-sm text-gray-400">Analytics & insights</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Modal -->
+        <div v-if="showProfileModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+            @click.self="showProfileModal = false">
+            <div class="bg-slate-800 border border-white/20 rounded-2xl max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-white">Edit Profile</h2>
+                    <button @click="showProfileModal = false"
+                        class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors">
+                        <i class="fas fa-times text-white"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                        <input type="text" v-model="profileForm.full_name"
+                            class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                        <input type="email" v-model="profileForm.email"
+                            class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
+                        <input type="password" v-model="passwordForm.current_password"
+                            class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">New Password</label>
+                        <input type="password" v-model="passwordForm.new_password"
+                            class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-blue-400 transition-colors">
+                    </div>
+                    <button @click="updateProfile"
+                        class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                        :disabled="profileLoading">
+                        <span v-if="!profileLoading">Update Profile</span>
+                        <span v-else><i class="fas fa-spinner fa-spin mr-2"></i>Updating...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('access_token')
+        const api = axios.create({ baseURL: '/api/v1', headers: token ? { Authorization: `Bearer ${token}` } : {} })
+
+        const DashboardApp = {
+            data() {
+                return {
+                    user: { full_name: '', email: '' },
+                    stats: { accounts: 0, tasks: 0, running: 0, completed: 0 },
+                    recentTasks: [],
+                    showProfileModal: false,
+                    profileForm: { full_name: '', email: '' },
+                    passwordForm: { current_password: '', new_password: '' },
+                    profileLoading: false
+                }
+            },
+            created() {
+                this.fetchUser()
+                this.fetchStats()
+            },
+            methods: {
+                async fetchUser() {
+                    try {
+                        const res = await api.get('/users/me');
+                        this.user = res.data;
+                        this.profileForm.full_name = res.data.full_name || '';
+                        this.profileForm.email = res.data.email || '';
+                    } catch (e) { console.log('not-auth') }
+                },
+                async fetchStats() {
+                    try {
+                        const accounts = await api.get('/accounts/');
+                        this.stats.accounts = accounts.data.count || accounts.data.length || 0
+                        const tasks = await api.get('/automation/automation_status/');
+                        this.recentTasks = tasks.data || []
+                        this.stats.tasks = this.recentTasks.length
+                        this.stats.running = this.recentTasks.filter(t => t.status === 'STARTED' || t.status === 'PROCESSING').length
+                        this.stats.completed = this.recentTasks.filter(t => t.status === 'SUCCESS').length
+                    } catch (err) { console.error(err) }
+                },
+                getStatusClass(status) {
+                    switch (status) {
+                        case 'SUCCESS': return 'bg-green-500/20 text-green-300 border border-green-500/30'
+                        case 'FAILED': return 'bg-red-500/20 text-red-300 border border-red-500/30'
+                        case 'STARTED': case 'PROCESSING': return 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
+                        default: return 'bg-gray-500/20 text-gray-300 border border-gray-500/30'
+                    }
+                },
+                getStatusBgColor(status) {
+                    switch (status) {
+                        case 'SUCCESS': return 'bg-green-500/20 text-green-400'
+                        case 'FAILED': return 'bg-red-500/20 text-red-400'
+                        case 'STARTED': case 'PROCESSING': return 'bg-yellow-500/20 text-yellow-400'
+                        default: return 'bg-gray-500/20 text-gray-400'
+                    }
+                },
+                getStatusIcon(status) {
+                    switch (status) {
+                        case 'SUCCESS': return 'fas fa-check-circle'
+                        case 'FAILED': return 'fas fa-exclamation-circle'
+                        case 'STARTED': case 'PROCESSING': return 'fas fa-spinner fa-spin'
+                        default: return 'fas fa-clock'
+                    }
+                },
+                formatDate(d) { return d ? new Date(d).toLocaleString() : '' },
+                viewTask(t) { alert(JSON.stringify(t, null, 2)) },
+                async startAutomation() {
+                    try {
+                        await api.post('/automation/start_automation');
+                        this.fetchStats();
+                    } catch (e) { alert('Failed to start automation') }
+                },
+                async stopAutomation() {
+                    try {
+                        await api.post('/automation/stop_automation');
+                        this.fetchStats();
+                    } catch (e) { alert('Failed to stop automation') }
+                },
+                goToAccounts() { window.location.href = '/accounts' },
+                goToReports() { window.location.href = '/automation' },
+                async updateProfile() {
+                    this.profileLoading = true;
+                    try {
+                        if (this.profileForm.full_name || this.profileForm.email) {
+                            await api.patch('/users/me', this.profileForm);
+                        }
+                        if (this.passwordForm.current_password && this.passwordForm.new_password) {
+                            await api.patch('/users/me/password', this.passwordForm);
+                        }
+                        this.showProfileModal = false;
+                        this.fetchUser();
+                        this.passwordForm = { current_password: '', new_password: '' };
+                    } catch (e) {
+                        alert('Failed to update profile')
+                    } finally {
+                        this.profileLoading = false
+                    }
+                },
+                logout() { localStorage.removeItem('access_token'); window.location.href = '/'; }
+            }
+        }
+
+        Vue.createApp(DashboardApp).mount('#app')
+    </script>
+    {% endraw %}
+</body>
+
+</html>

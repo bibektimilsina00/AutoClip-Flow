@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoClip Flow - Sign Up</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+    </style>
+</head>
+
+<body>
+    {% raw %}
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="bg-slate-900 border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <a href="/" class="flex items-center gap-3 text-white">
+                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                            <i class="fas fa-video text-white"></i>
+                        </div>
+                        <span class="text-xl font-semibold">AutoClip Flow</span>
+                    </a>
+                    <div class="flex items-center gap-8">
+                        <a href="/" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                        <a href="/login" class="text-gray-300 hover:text-white transition-colors">Login</a>
+                        <a href="/signup" class="text-white border-b-2 border-blue-500 pb-1">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sign Up Section -->
+        <section class="py-16 min-h-screen flex items-center">
+            <div class="max-w-md mx-auto w-full px-6">
+                <div class="bg-white/5 border border-white/10 p-8 rounded-2xl">
+                    <div class="text-center mb-6">
+                        <div
+                            class="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-user-plus text-blue-400 text-2xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white">Create Account</h2>
+                        <p class="text-gray-400">Join AutoClip Flow and start automating</p>
+                    </div>
+
+                    <form @submit.prevent="register" class="space-y-4">
+                        <div>
+                            <label class="text-sm font-medium text-gray-300">Full Name</label>
+                            <input type="text" required v-model="form.full_name"
+                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                                placeholder="Your full name">
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-300">Email</label>
+                            <input type="email" required v-model="form.email"
+                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                                placeholder="you@example.com">
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-300">Password</label>
+                            <input type="password" required v-model="form.password"
+                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                                placeholder="Create a password">
+                        </div>
+                        <div>
+                            <button type="submit" :disabled="loading"
+                                class="w-full inline-flex justify-center items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span v-if="loading" class="loader"></span>
+                                <i v-else class="fas fa-user-plus"></i>
+                                {{ loading ? 'Creating account...' : 'Create Account' }}
+                            </button>
+                        </div>
+                        <div v-if="error" class="text-sm text-red-400">{{ error }}</div>
+                        <div v-if="success" class="text-sm text-green-400">{{ success }}</div>
+                    </form>
+
+                    <div class="mt-6 text-center text-sm text-gray-400">
+                        Already have an account? <a href="/login"
+                            class="text-blue-400 hover:text-blue-300 font-medium">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const SignupApp = {
+            data() {
+                return {
+                    form: { full_name: '', email: '', password: '' },
+                    loading: false,
+                    error: null,
+                    success: null
+                }
+            },
+            methods: {
+                async register() {
+                    this.loading = true;
+                    this.error = null;
+                    this.success = null;
+                    try {
+                        await axios.post('/api/v1/users/', this.form);
+                        this.success = 'Account created successfully! You can now log in.';
+                        this.form = { full_name: '', email: '', password: '' };
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2000);
+                    } catch (err) {
+                        this.error = err?.response?.data?.detail || 'Registration failed';
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            }
+        }
+        Vue.createApp(SignupApp).mount('#app')
+    </script>
+    {% endraw %}
+</body>
+
+</html>

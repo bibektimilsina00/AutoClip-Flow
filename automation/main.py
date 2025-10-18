@@ -4,6 +4,7 @@ import time
 from seleniumbase import BaseCase
 
 from automation.manager.video_manager import VideoManager
+from automation.services.facebook_service import FacebookService
 from automation.services.google_drive_service import GoogleDriveService
 from automation.services.instagram_service import InstagramService
 from automation.services.tiktok_service import TikTokService
@@ -23,7 +24,7 @@ class MainApp(BaseCase):
         super().setUp()
 
     def run_for_account(
-        self, sb: BaseCase, drive_folder_id, email, password, platforms
+        self, sb: BaseCase, drive_folder_id, email, password, platforms, account=None
     ):
         logger.info(f"Processing account for: {email}")
         try:
@@ -36,7 +37,9 @@ class MainApp(BaseCase):
             if not video_path:
                 return
 
-            self.upload_to_platforms(sb, video, email, password, video_path, platforms)
+            self.upload_to_platforms(
+                sb, video, email, password, video_path, platforms, account
+            )
 
             logger.info(f"Finished processing video: {video['name']}")
             self.video_manager.mark_as_uploaded(
@@ -77,7 +80,9 @@ class MainApp(BaseCase):
             logger.error(f"Failed to download video: {video['name']}")
             return None
 
-    def upload_to_platforms(self, sb, video, email, password, video_path, platforms):
+    def upload_to_platforms(
+        self, sb, video, email, password, video_path, platforms, account=None
+    ):
         for platform in platforms:
             upload_success = False
             max_retries = 3
@@ -103,6 +108,10 @@ class MainApp(BaseCase):
                         # continue
                         upload_success = self.upload_to_instagram(
                             sb, video, email, password, video_path
+                        )
+                    elif platform == "facebook":
+                        upload_success = self.upload_to_facebook(
+                            sb, video, email, password, video_path, account
                         )
 
                     if upload_success:
@@ -146,3 +155,43 @@ class MainApp(BaseCase):
         tiktok.visit_page(sb)
         tiktok.login(sb)
         return tiktok.upload_video(sb, video_path, "Amazing video, check it out!")
+
+    def upload_to_facebook(
+        self, sb, video, email, password, video_path, account=None
+    ) -> bool:
+        facebook = FacebookService(email, password, user_id=self.user_id)
+        facebook.visit_page(sb)
+        facebook.login(sb)
+
+        # Default message
+        message = f"Uploaded from Google Drive: {video['name']}"
+
+        # Try uploading to group and/or page if configured in a settings file
+        # Look for account-level settings: a small, non-invasive approach is to check
+        # environment vars or a simple JSON file per-user. For now, attempt both
+        # page and group upload using account-level stored cookies and defaults.
+        uploaded = False
+
+        try:
+            # Use account settings when available to decide targets
+            if account:
+                if getattr(account, "facebook_post_to_page", False):
+                    page_id = getattr(account, "facebook_page_id", None)
+                    if facebook.upload_to_page(sb, video_path, message, page_id):
+                        uploaded = True
+
+                if getattr(account, "facebook_post_to_group", False):
+                    group_id = getattr(account, "facebook_group_id", None)
+                    if facebook.upload_to_group(sb, video_path, message, group_id):
+                        uploaded = True
+            else:
+                # Default behavior: try both
+                if facebook.upload_to_page(sb, video_path, message):
+                    uploaded = True
+                if facebook.upload_to_group(sb, video_path, message):
+                    uploaded = True
+
+            return uploaded
+        except Exception as e:
+            logger.error(f"Facebook upload failed: {str(e)}")
+            return False
