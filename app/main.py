@@ -79,6 +79,16 @@ async def accounts_page(request: Request):
     return templates.TemplateResponse("accounts.html", {"request": request})
 
 
+@app.get("/accounts/new", response_class=HTMLResponse)
+async def account_create_page(request: Request):
+    return templates.TemplateResponse("account_form.html", {"request": request})
+
+
+@app.get("/accounts/{account_id}/edit", response_class=HTMLResponse)
+async def account_edit_page(request: Request, account_id: str):
+    return templates.TemplateResponse("account_form.html", {"request": request})
+
+
 @app.get("/automation", response_class=HTMLResponse)
 async def automation_page(request: Request):
     return templates.TemplateResponse("automation.html", {"request": request})
@@ -87,6 +97,11 @@ async def automation_page(request: Request):
 @app.get("/users", response_class=HTMLResponse)
 async def users_page(request: Request):
     return templates.TemplateResponse("users.html", {"request": request})
+
+
+@app.get("/profile", response_class=HTMLResponse)
+async def profile_page(request: Request):
+    return templates.TemplateResponse("profile.html", {"request": request})
 
 
 @app.get("/signup", response_class=HTMLResponse)

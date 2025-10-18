@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - AutoClip Flow</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-slate-900 min-h-screen">
+    <div id="app">
+        {% include '_nav.html' %}
+
+        {% raw %}
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Header Section -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">Account Settings</h1>
+                <p class="text-gray-400">Manage your profile, security, and preferences</p>
+            </div>
+
+            <!-- Main Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Sidebar Navigation -->
+                <div class="lg:col-span-3">
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-2 sticky top-6">
+                        <nav class="space-y-1">
+                            <button @click="activeTab = 'profile'"
+                                :class="activeTab === 'profile' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-white/5'"
+                                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left">
+                                <i class="fas fa-user w-5"></i>
+                                <span class="font-medium">Profile</span>
+                            </button>
+                            <button @click="activeTab = 'security'"
+                                :class="activeTab === 'security' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-white/5'"
+                                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left">
+                                <i class="fas fa-shield-alt w-5"></i>
+                                <span class="font-medium">Security</span>
+                            </button>
+                            <button @click="activeTab = 'integrations'"
+                                :class="activeTab === 'integrations' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-white/5'"
+                                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left">
+                                <i class="fas fa-plug w-5"></i>
+                                <span class="font-medium">Integrations</span>
+                            </button>
+                            <button @click="activeTab = 'activity'"
+                                :class="activeTab === 'activity' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-white/5'"
+                                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left">
+                                <i class="fas fa-clock w-5"></i>
+                                <span class="font-medium">Activity</span>
+                            </button>
+                        </nav>
+
+                        <div class="mt-6 pt-6 border-t border-white/10">
+                            <button @click="logout"
+                                class="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-lg transition-all text-left">
+                                <i class="fas fa-sign-out-alt w-5"></i>
+                                <span class="font-medium">Logout</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="lg:col-span-9">
+
+                    <!-- Profile Tab -->
+                    <div v-if="activeTab === 'profile'" class="space-y-6">
+                        <!-- Profile Header Card -->
+                        <div
+                            class="bg-gradient-to-br from-indigo-500/10 to-pink-500/10 border border-white/10 rounded-2xl p-6">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                                <div class="relative">
+                                    <div
+                                        class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                                        {{ user.full_name ? user.full_name.charAt(0).toUpperCase() : 'U' }}
+                                    </div>
+                                    <div
+                                        class="absolute -bottom-1 -right-1 w-8 h-8 bg-green-500 rounded-full border-4 border-slate-900">
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h2 class="text-2xl font-bold text-white mb-1">{{ user.full_name || 'Your Name' }}
+                                    </h2>
+                                    <p class="text-gray-400 mb-3">{{ user.email || 'email@example.com' }}</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                                            <i class="fas fa-crown mr-1.5"></i>
+                                            {{ user.is_superuser ? 'Administrator' : 'User' }}
+                                        </span>
+                                        <span
+                                            :class="user.is_active ? 'bg-green-500/20 text-green-300 border-green-500/30' : 'bg-red-500/20 text-red-300 border-red-500/30'"
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border">
+                                            <i :class="user.is_active ? 'fa-check-circle' : 'fa-times-circle'"
+                                                class="fas mr-1.5"></i>
+                                            {{ user.is_active ? 'Active' : 'Inactive' }}
+                                        </span>
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/5 text-gray-300 border border-white/10">
+                                            <i class="fas fa-calendar mr-1.5"></i>
+                                            Joined {{ formatDate(user.created_at) || '—' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Information Form -->
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-white">Profile Information</h3>
+                                    <p class="text-sm text-gray-400 mt-1">Update your personal details</p>
+                                </div>
+                            </div>
+
+                            <form @submit.prevent="updateProfile" class="space-y-5">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">
+                                            <i class="fas fa-user mr-2 text-gray-400"></i>Full Name
+                                        </label>
+                                        <input v-model="profileForm.full_name" type="text"
+                                            class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                            placeholder="John Doe" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">
+                                            <i class="fas fa-envelope mr-2 text-gray-400"></i>Email Address
+                                        </label>
+                                        <input v-model="profileForm.email" type="email"
+                                            class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                            placeholder="john@example.com" />
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                                    <p class="text-sm text-gray-400">
+                                        <i class="fas fa-info-circle mr-2"></i>Changes will be saved to your account
+                                    </p>
+                                    <button type="submit"
+                                        class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-all shadow-lg hover:shadow-indigo-500/50">
+                                        <i class="fas fa-save mr-2"></i>Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Account Statistics -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-400 text-sm mb-1">Total Automations</p>
+                                        <p class="text-2xl font-bold text-white">24</p>
+                                    </div>
+                                    <div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-robot text-indigo-400 text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-400 text-sm mb-1">Videos Processed</p>
+                                        <p class="text-2xl font-bold text-white">1,247</p>
+                                    </div>
+                                    <div class="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-video text-pink-400 text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-gray-400 text-sm mb-1">Storage Used</p>
+                                        <p class="text-2xl font-bold text-white">48 GB</p>
+                                    </div>
+                                    <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-database text-purple-400 text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div v-if="activeTab === 'security'" class="space-y-6">
+                        <!-- Change Password -->
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <div class="mb-6">
+                                <h3 class="text-xl font-semibold text-white flex items-center gap-2">
+                                    <i class="fas fa-lock"></i>
+                                    Change Password
+                                </h3>
+                                <p class="text-sm text-gray-400 mt-1">Ensure your account stays secure with a strong
+                                    password</p>
+                            </div>
+
+                            <form @submit.prevent="updateProfile" class="space-y-5">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                                        <i class="fas fa-key mr-2 text-gray-400"></i>Current Password
+                                    </label>
+                                    <input v-model="passwordForm.current_password" type="password"
+                                        class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                        placeholder="Enter current password" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                                        <i class="fas fa-lock mr-2 text-gray-400"></i>New Password
+                                    </label>
+                                    <input v-model="passwordForm.new_password" type="password"
+                                        class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                        placeholder="Enter new password" />
+                                    <p class="text-xs text-gray-400 mt-2">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        Use at least 8 characters with a mix of letters, numbers & symbols
+                                    </p>
+                                </div>
+
+                                <div class="flex items-center justify-end pt-4 border-t border-white/10">
+                                    <button type="submit"
+                                        class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-all shadow-lg hover:shadow-indigo-500/50">
+                                        <i class="fas fa-shield-alt mr-2"></i>Update Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Security Recommendations -->
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                                <i class="fas fa-shield-alt"></i>
+                                Security Recommendations
+                            </h3>
+                            <div class="space-y-3">
+                                <div
+                                    class="flex items-start gap-3 p-3 rounded-lg bg-green-500/10 border border-green-500/30">
+                                    <i class="fas fa-check-circle text-green-400 mt-1"></i>
+                                    <div>
+                                        <p class="text-sm font-medium text-green-300">Strong password enabled</p>
+                                        <p class="text-xs text-gray-400 mt-1">Your password meets security requirements
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/10">
+                                    <i class="fas fa-circle text-gray-400 mt-1 text-xs"></i>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-300">Two-factor authentication</p>
+                                        <p class="text-xs text-gray-400 mt-1">Add an extra layer of security (Coming
+                                            soon)</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5 border border-white/10">
+                                    <i class="fas fa-circle text-gray-400 mt-1 text-xs"></i>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-300">Login notifications</p>
+                                        <p class="text-xs text-gray-400 mt-1">Get notified of new login attempts (Coming
+                                            soon)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Session Management -->
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                                <i class="fas fa-desktop"></i>
+                                Active Sessions
+                            </h3>
+                            <div class="space-y-3">
+                                <div
+                                    class="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10">
+                                    <div class="flex items-center gap-4">
+                                        <div
+                                            class="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-laptop text-indigo-400"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-white">Current Session</p>
+                                            <p class="text-xs text-gray-400">Chrome on Windows • Kathmandu, Nepal</p>
+                                        </div>
+                                    </div>
+                                    <span
+                                        class="px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
+                                        Active Now
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Integrations Tab -->
+                    <div v-if="activeTab === 'integrations'" class="space-y-6">
+                        <!-- Google Drive Integration -->
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <div class="flex items-start justify-between mb-6">
+                                <div class="flex items-start gap-4">
+                                    <div
+                                        class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-lg">
+                                        <i class="fab fa-google-drive text-2xl" style="color: #4285F4;"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-white">Google Drive</h3>
+                                        <p class="text-sm text-gray-400 mt-1">Connect your Google Drive for automated
+                                            video uploads</p>
+                                        <div v-if="user.google_service_account_file" class="mt-3">
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
+                                                <i class="fas fa-check-circle mr-1.5"></i>
+                                                Connected on {{ formatDate(user.google_service_account_uploaded_at) }}
+                                            </span>
+                                        </div>
+                                        <div v-else class="mt-3">
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-500/20 text-gray-300 border border-gray-500/30">
+                                                <i class="fas fa-unlink mr-1.5"></i>
+                                                Not Connected
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="p-4 rounded-lg bg-indigo-500/10 border border-indigo-500/30">
+                                    <h4 class="text-sm font-medium text-indigo-300 mb-2">
+                                        <i class="fas fa-info-circle mr-2"></i>Setup Instructions
+                                    </h4>
+                                    <ol class="text-sm text-gray-300 space-y-1 ml-6 list-decimal">
+                                        <li>Create a service account in Google Cloud Console</li>
+                                        <li>Generate and download a JSON key file</li>
+                                        <li>Share your Google Drive folder with the service account email</li>
+                                        <li>Upload the key file below</li>
+                                    </ol>
+                                </div>
+
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input id="keyfile" type="file" @change="onKeyFileChange" accept="application/json"
+                                        class="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-indigo-500/20 file:text-indigo-300 hover:file:bg-indigo-500/30 cursor-pointer" />
+                                    <button @click="uploadGoogleKey" :disabled="uploadingKey"
+                                        class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600/50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all shadow-lg hover:shadow-indigo-500/50 whitespace-nowrap">
+                                        <span v-if="!uploadingKey"><i class="fas fa-upload mr-2"></i>Upload Key</span>
+                                        <span v-else><i class="fas fa-spinner fa-spin mr-2"></i>Uploading...</span>
+                                    </button>
+                                    <button v-if="user.google_service_account_file" @click="removeGoogleKey"
+                                        class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all">
+                                        <i class="fas fa-trash mr-2"></i>Remove
+                                    </button>
+                                </div>
+
+                                <p v-if="uploadMessage" class="text-sm px-4 py-3 rounded-lg"
+                                    :class="uploadMessage.includes('failed') || uploadMessage.includes('failed') ? 'bg-red-500/10 text-red-300 border border-red-500/30' : 'bg-green-500/10 text-green-300 border border-green-500/30'">
+                                    <i :class="uploadMessage.includes('failed') || uploadMessage.includes('failed') ? 'fa-exclamation-circle' : 'fa-check-circle'"
+                                        class="fas mr-2"></i>
+                                    {{ uploadMessage }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Coming Soon Integrations -->
+                        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <h3 class="text-lg font-semibold text-white mb-4">More Integrations Coming Soon</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="p-4 rounded-lg bg-white/5 border border-white/10 opacity-60">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
+                                            <i class="fab fa-youtube text-white text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-white">YouTube</p>
+                                            <p class="text-xs text-gray-400">Direct video uploads</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs text-gray-400">Coming Soon</span>
+                                </div>
+                                <div class="p-4 rounded-lg bg-white/5 border border-white/10 opacity-60">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div
+                                            class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                                            <i class="fab fa-instagram text-white text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-white">Instagram</p>
+                                            <p class="text-xs text-gray-400">Post automation</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs text-gray-400">Coming Soon</span>
+                                </div>
+                                <div class="p-4 rounded-lg bg-white/5 border border-white/10 opacity-60">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
+                                            <i class="fab fa-tiktok text-white text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-white">TikTok</p>
+                                            <p class="text-xs text-gray-400">Video publishing</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs text-gray-400">Coming Soon</span>
+                                </div>
+                                <div class="p-4 rounded-lg bg-white/5 border border-white/10 opacity-60">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                            <i class="fab fa-dropbox text-white text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-white">Dropbox</p>
+                                            <p class="text-xs text-gray-400">Cloud storage sync</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs text-gray-400">Coming Soon</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Tab -->
+                    <div v-if="activeTab === 'activity'" class="space-y-6">
+                        <!-- Activity Timeline -->
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                            <h3 class="text-xl font-semibold text-white mb-6 flex items-center gap-2">
+                                <i class="fas fa-history"></i>
+                                Recent Activity
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex gap-4">
+                                    <div class="flex flex-col items-center">
+                                        <div
+                                            class="w-10 h-10 bg-indigo-500/20 rounded-full flex items-center justify-center border-2 border-indigo-500">
+                                            <i class="fas fa-play text-indigo-400 text-sm"></i>
+                                        </div>
+                                        <div class="w-0.5 h-full bg-white/10 mt-2"></div>
+                                    </div>
+                                    <div class="flex-1 pb-6">
+                                        <p class="text-white font-medium">Started automation workflow</p>
+                                        <p class="text-sm text-gray-400 mt-1">Automation "Social Media Clips" started
+                                            processing</p>
+                                        <p class="text-xs text-gray-500 mt-2">2 days ago</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4">
+                                    <div class="flex flex-col items-center">
+                                        <div
+                                            class="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center border-2 border-green-500">
+                                            <i class="fas fa-check text-green-400 text-sm"></i>
+                                        </div>
+                                        <div class="w-0.5 h-full bg-white/10 mt-2"></div>
+                                    </div>
+                                    <div class="flex-1 pb-6">
+                                        <p class="text-white font-medium">Video processing completed</p>
+                                        <p class="text-sm text-gray-400 mt-1">12 clips generated successfully</p>
+                                        <p class="text-xs text-gray-500 mt-2">3 days ago</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4">
+                                    <div class="flex flex-col items-center">
+                                        <div
+                                            class="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center border-2 border-purple-500">
+                                            <i class="fas fa-key text-purple-400 text-sm"></i>
+                                        </div>
+                                        <div class="w-0.5 h-full bg-white/10 mt-2"></div>
+                                    </div>
+                                    <div class="flex-1 pb-6">
+                                        <p class="text-white font-medium">Google Drive key uploaded</p>
+                                        <p class="text-sm text-gray-400 mt-1">Service account connected successfully</p>
+                                        <p class="text-xs text-gray-500 mt-2">1 week ago</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4">
+                                    <div class="flex flex-col items-center">
+                                        <div
+                                            class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center border-2 border-blue-500">
+                                            <i class="fas fa-upload text-blue-400 text-sm"></i>
+                                        </div>
+                                        <div class="w-0.5 h-full bg-white/10 mt-2"></div>
+                                    </div>
+                                    <div class="flex-1 pb-6">
+                                        <p class="text-white font-medium">Files uploaded to Drive</p>
+                                        <p class="text-sm text-gray-400 mt-1">8 video files uploaded successfully</p>
+                                        <p class="text-xs text-gray-500 mt-2">2 weeks ago</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4">
+                                    <div class="flex flex-col items-center">
+                                        <div
+                                            class="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center border-2 border-yellow-500">
+                                            <i class="fas fa-shield-alt text-yellow-400 text-sm"></i>
+                                        </div>
+                                        <div class="w-0.5 h-full bg-white/10 mt-2"></div>
+                                    </div>
+                                    <div class="flex-1 pb-6">
+                                        <p class="text-white font-medium">Password changed</p>
+                                        <p class="text-sm text-gray-400 mt-1">Account security updated</p>
+                                        <p class="text-xs text-gray-500 mt-2">3 months ago</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4">
+                                    <div class="flex flex-col items-center">
+                                        <div
+                                            class="w-10 h-10 bg-pink-500/20 rounded-full flex items-center justify-center border-2 border-pink-500">
+                                            <i class="fas fa-user-plus text-pink-400 text-sm"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-white font-medium">Account created</p>
+                                        <p class="text-sm text-gray-400 mt-1">Welcome to AutoClip Flow!</p>
+                                        <p class="text-xs text-gray-500 mt-2">{{ formatDate(user.created_at) || '—' }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Activity Stats -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                                <h4 class="text-sm font-medium text-gray-400 mb-4">This Month</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-300">Automations Run</span>
+                                        <span class="text-lg font-semibold text-white">18</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-300">Videos Processed</span>
+                                        <span class="text-lg font-semibold text-white">156</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-300">Total Runtime</span>
+                                        <span class="text-lg font-semibold text-white">24h</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                                <h4 class="text-sm font-medium text-gray-400 mb-4">All Time</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-300">Total Automations</span>
+                                        <span class="text-lg font-semibold text-white">142</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-300">Videos Created</span>
+                                        <span class="text-lg font-semibold text-white">1,247</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-300">Success Rate</span>
+                                        <span class="text-lg font-semibold text-green-400">98.5%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div v-if="showSuccessMessage"
+                        class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3 animate-fade-in z-50">
+                        <i class="fas fa-check-circle text-xl"></i>
+                        <span class="font-medium">{{ successMessage }}</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Support Section -->
+            <div
+                class="mt-8 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-white/10 rounded-xl p-6">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-life-ring text-indigo-400 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-white">Need Help?</h3>
+                            <p class="text-sm text-gray-400 mt-1">Our support team is here to assist you</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="mailto:support@example.com"
+                            class="px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg transition-all flex items-center gap-2">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email Support</span>
+                        </a>
+                        <a href="#"
+                            class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all flex items-center gap-2">
+                            <i class="fas fa-book"></i>
+                            <span>Documentation</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const token = localStorage.getItem('access_token')
+            const api = axios.create({ baseURL: '/api/v1', headers: token ? { Authorization: `Bearer ${token}` } : {} })
+
+            const ProfileApp = {
+                data() {
+                    return {
+                        user: {},
+                        activeTab: 'profile',
+                        profileForm: { full_name: '', email: '' },
+                        passwordForm: { current_password: '', new_password: '' },
+                        selectedKeyFile: null,
+                        uploadingKey: false,
+                        uploadMessage: '',
+                        showSuccessMessage: false,
+                        successMessage: ''
+                    }
+                },
+                created() {
+                    this.fetchUser()
+                },
+                methods: {
+                    formatDate(d) {
+                        if (!d) return '—'
+                        const date = new Date(d)
+                        const now = new Date()
+                        const diff = Math.floor((now - date) / 1000)
+
+                        if (diff < 60) return 'just now'
+                        if (diff < 3600) return Math.floor(diff / 60) + ' minutes ago'
+                        if (diff < 86400) return Math.floor(diff / 3600) + ' hours ago'
+                        if (diff < 604800) return Math.floor(diff / 86400) + ' days ago'
+                        if (diff < 2592000) return Math.floor(diff / 604800) + ' weeks ago'
+                        if (diff < 31536000) return Math.floor(diff / 2592000) + ' months ago'
+
+                        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                    },
+                    async fetchUser() {
+                        try {
+                            const res = await api.get('/users/me')
+                            this.user = res.data
+                            this.profileForm.full_name = res.data.full_name || ''
+                            this.profileForm.email = res.data.email || ''
+                        } catch (e) {
+                            console.error(e)
+                            if (e.response && e.response.status === 401) {
+                                this.logout()
+                            }
+                        }
+                    },
+                    onKeyFileChange(e) {
+                        this.selectedKeyFile = e.target.files && e.target.files[0]
+                        this.uploadMessage = ''
+                    },
+                    async uploadGoogleKey() {
+                        if (!this.selectedKeyFile) {
+                            this.uploadMessage = 'Please select a file first'
+                            return
+                        }
+                        this.uploadingKey = true
+                        this.uploadMessage = ''
+                        const form = new FormData()
+                        form.append('file', this.selectedKeyFile)
+                        try {
+                            const res = await api.post('/users/me/google-key', form, {
+                                headers: { 'Content-Type': 'multipart/form-data' }
+                            })
+                            this.uploadMessage = res.data.message || 'Key uploaded successfully'
+                            this.showSuccess('Google Drive key uploaded successfully')
+                            await this.fetchUser()
+                            document.getElementById('keyfile').value = ''
+                            this.selectedKeyFile = null
+                        } catch (e) {
+                            this.uploadMessage = e?.response?.data?.detail || 'Upload failed. Please try again.'
+                        } finally {
+                            this.uploadingKey = false
+                        }
+                    },
+                    async removeGoogleKey() {
+                        if (!confirm('Are you sure you want to remove the uploaded Google Drive key?')) return
+                        try {
+                            await api.delete('/users/me/google-key')
+                            this.uploadMessage = 'Key removed successfully'
+                            this.showSuccess('Google Drive key removed')
+                            await this.fetchUser()
+                        } catch (e) {
+                            this.uploadMessage = e?.response?.data?.detail || 'Failed to remove key'
+                        }
+                    },
+                    async updateProfile() {
+                        try {
+                            let updated = false
+
+                            if (this.profileForm.full_name || this.profileForm.email) {
+                                await api.patch('/users/me', this.profileForm)
+                                updated = true
+                            }
+
+                            if (this.passwordForm.current_password && this.passwordForm.new_password) {
+                                await api.patch('/users/me/password', this.passwordForm)
+                                this.passwordForm = { current_password: '', new_password: '' }
+                                updated = true
+                            }
+
+                            if (updated) {
+                                await this.fetchUser()
+                                this.showSuccess('Profile updated successfully')
+                            }
+                        } catch (e) {
+                            this.uploadMessage = e?.response?.data?.detail || 'Failed to update profile'
+                        }
+                    },
+                    showSuccess(message) {
+                        this.successMessage = message
+                        this.showSuccessMessage = true
+                        setTimeout(() => {
+                            this.showSuccessMessage = false
+                        }, 3000)
+                    },
+                    logout() {
+                        localStorage.removeItem('access_token')
+                        window.location.href = '/'
+                    }
+                }
+            }
+
+            Vue.createApp(ProfileApp).mount('#app')
+        </script>
+
+        <style>
+            @keyframes fade-in {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .animate-fade-in {
+                animation: fade-in 0.3s ease-out;
+            }
+        </style>
+
+        {% endraw %}
+    </div>
+
+</body>
+
+</html>

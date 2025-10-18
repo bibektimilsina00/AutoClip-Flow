@@ -1,8 +1,9 @@
 import uuid
+from datetime import datetime
+from typing import TYPE_CHECKING, List
 
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
-from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from models.account_model import Account
@@ -50,11 +51,17 @@ class User(UserBase, table=True):
     hashed_password: str
     accounts: List["Account"] = Relationship(back_populates="owner")
     tasks: List["UserTask"] = Relationship(back_populates="user")
+    # Optional path to per-user Google service account JSON
+    google_service_account_file: str | None = Field(default=None, max_length=1024)
+    # When the user uploaded the key
+    google_service_account_uploaded_at: datetime | None = Field(default=None)
 
 
 # Properties to return via API, id is always required
 class UserPublic(UserBase):
     id: uuid.UUID
+    google_service_account_file: str | None = None
+    google_service_account_uploaded_at: datetime | None = None
 
 
 class UsersPublic(SQLModel):

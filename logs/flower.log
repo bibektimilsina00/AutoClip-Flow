@@ -1,6 +1,6 @@
-[I 241105 10:52:06 command:168] Visit me at http://0.0.0.0:5555
-[I 241105 10:52:06 command:176] Broker: redis://localhost:6379/0
-[I 241105 10:52:06 command:177] Registered tasks: 
+[I 251018 21:06:02 command:168] Visit me at http://0.0.0.0:5555
+[I 251018 21:06:02 command:176] Broker: redis://localhost:6379/0
+[I 251018 21:06:02 command:177] Registered tasks: 
     ['celery.accumulate',
      'celery.backend_cleanup',
      'celery.chain',
@@ -13,55 +13,12 @@
      'celery_worker.task.process_task',
      'celery_worker.task.run_user_automation',
      'celery_worker.task.schedule_next_day']
-Traceback (most recent call last):
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/bin/celery", line 8, in <module>
-    sys.exit(main())
-             ~~~~^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/celery/__main__.py", line 15, in main
-    sys.exit(_main())
-             ~~~~~^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/celery/bin/celery.py", line 236, in main
-    return celery(au[E 241105 10:54:00 events:191] Failed to capture events: 'Connection closed by server.', trying again in 1 seconds.
-[E 241105 10:54:07 events:191] Failed to capture events: 'Error 61 connecting to localhost:6379. Connection refused.', trying again in 2 seconds.
-[E 241105 10:54:15 events:191] Failed to capture events: 'Error 61 connecting to localhost:6379. Connection refused.', trying again in 4 seconds.
-[E 241105 10:54:25 events:191] Failed to capture events: 'Error 61 connecting to localhost:6379. Connection refused.', trying again in 8 seconds.
-kages/click/core.py", line 1688, in invoke
-    return _process_result(sub_ctx.command.invoke(sub_ctx))
-                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/click/core.py", line 1434, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/click/core.py", line 783, in invoke
-    return __callback(*args, **kwargs)
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/click/decorators.py", line 33, in new_func
-    return f(get_current_context(), *args, **kwargs)
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/flower/command.py", line 57, in flower
-    flower_app.start()
-    ~~~~~~~~~~~~~~~~^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/flower/app.py", line 72, in start
-    self.listen(self.options.port, address=self.options.address,
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                ssl_options=self.ssl_options,
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                xheaders=self.options.xheaders)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/tornado/web.py", line 2211, in listen
-    server.listen(
-    ~~~~~~~~~~~~~^
-        port,
-        ^^^^^
-    ...<4 lines>...
-        reuse_port=reuse_port,
-        ^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/tornado/tcpserver.py", line 183, in listen
-    sockets = bind_sockets(
-        port,
-    ...<4 lines>...
-        reuse_port=reuse_port,
-    )
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/tornado/netutil.py", line 162, in bind_sockets
-    sock.bind(sockaddr)
-    ~~~~~~~~~^^^^^^^^^^
-OSError: [Errno 48] Address already in use
+[I 251018 21:06:02 mixins:228] Connected to redis://localhost:6379/0
+[W 251018 21:06:03 inspector:44] Inspect method revoked failed
+[W 251018 21:06:03 inspector:44] Inspect method active_queues failed
+[W 251018 21:06:03 inspector:44] Inspect method scheduled failed
+[W 251018 21:06:03 inspector:44] Inspect method conf failed
+[W 251018 21:06:03 inspector:44] Inspect method reserved failed
+[W 251018 21:06:03 inspector:44] Inspect method registered failed
+[W 251018 21:06:03 inspector:44] Inspect method stats failed
+[W 251018 21:06:03 inspector:44] Inspect method active failed

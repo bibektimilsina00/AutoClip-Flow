@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING, List, Optional
 from pydantic import EmailStr
 
 from app.models.user_model import Field, Relationship, SQLModel
-from automation.enums.platform import Platform
+
+# single-enum Platform removed; we store multiple platforms as CSV in `platforms`
 
 if TYPE_CHECKING:
     from models.task_model import UserTask
@@ -17,7 +18,8 @@ class AccountBase(SQLModel):
     name: str = Field(min_length=1, max_length=255)
     email: EmailStr = Field(index=True, unique=True, max_length=255)
     google_drive_folder_id: str = Field(max_length=255)
-    platform: Platform = Field(default=Platform.TIKTOK)
+    # Store multiple selected platforms as CSV (e.g. "tiktok,instagram,facebook")
+    platforms: Optional[str] = Field(default=None, max_length=255)
     # Facebook-specific optional settings
     facebook_page_id: Optional[str] = Field(default=None, max_length=255)
     facebook_group_id: Optional[str] = Field(default=None, max_length=255)
@@ -36,7 +38,7 @@ class AccountUpdate(SQLModel):
     name: Optional[str] = Field(default=None, min_length=1, max_length=255)
     email: Optional[EmailStr] = Field(default=None, max_length=255)
     google_drive_folder_id: Optional[str] = Field(default=None, max_length=255)
-    platform: Optional[Platform] = Field(default=None)
+    platforms: Optional[str] = Field(default=None)
     password: Optional[str] = Field(default=None, min_length=8, max_length=40)
 
 

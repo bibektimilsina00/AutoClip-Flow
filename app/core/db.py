@@ -4,7 +4,30 @@ from app import crud
 from app.core.config import settings
 from app.models.user_model import User, UserCreate
 
-engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
+# Enable pool_pre_ping to avoid using stale / closed connections from the
+# connection pool. Add a small connect timeout so initial network/connect
+# attempts fail fast instead of hanging indefinitely. Tune pool_size and
+# max_overflow to reasonable defaults for local deployments — adjust for
+# production as needed.
+engine = create_engine(
+    str(settings.SQLALCHEMY_DATABASE_URI),
+    pool_pre_ping=True,
+    pool_size=10,
+    max_overflow=20,
+    # connect_args passed to the DB driver (psycopg). Keepalives help detect
+    # and recover from broken TCP connections (common in cloud networks).
+    connect_args={
+        "connect_timeout": 10,
+        # Enable TCP keepalives (supported by libpq/psycopg) so dead sockets are
+        # detected sooner. Values are seconds.
+        "keepalives": 1,
+        "keepalives_idle": 60,
+        "keepalives_interval": 15,
+        "keepalives_count": 5,
+    },
+    # Wait up to 30s for a connection from the pool before raising
+    pool_timeout=30,
+)
 
 
 # make sure all SQLModel models are imported ( models) before initializing DB

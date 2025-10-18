@@ -1,20 +1,27 @@
+import io
 import json
 import os
-from googleapiclient.discovery import build
+
 from google.oauth2 import service_account
+from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
-import io
+
 from automation.config.config import Config
-from automation.utils.file_utils import FileUtils
 from automation.manager.video_manager import VideoManager
+from automation.utils.file_utils import FileUtils
 
 
 class GoogleDriveService:
-    def __init__(self):
+    def __init__(self, credentials_path: str | None = None):
         config: Config = Config()
         video_manager = VideoManager()
+        # Allow a per-user credentials file to be provided; otherwise use global config
+        creds = credentials_path or config.GOOGLE_APPLICATION_CREDENTIALS
+        if not creds or not os.path.exists(creds):
+            raise FileNotFoundError(f"Google credentials file not found: {creds}")
+
         credentials = service_account.Credentials.from_service_account_file(
-            config.GOOGLE_APPLICATION_CREDENTIALS,
+            creds,
         )
         self.drive_service = build("drive", "v3", credentials=credentials)
         self.video_status_file = config.VIDEOS_STATUS_FILE

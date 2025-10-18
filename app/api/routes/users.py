@@ -1,17 +1,15 @@
+import os
 import uuid
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlmodel import col, delete, func, select
 
 from app import crud
-from app.api.deps import (
-    CurrentUser,
-    SessionDep,
-    get_current_active_superuser,
-)
+from app.api.deps import CurrentUser, SessionDep, get_current_active_superuser
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
+from app.models.account_model import Account
 from app.models.user_model import (
     Message,
     UpdatePassword,
@@ -24,9 +22,74 @@ from app.models.user_model import (
     UserUpdateMe,
 )
 from app.utils import generate_new_account_email, send_email
-from app.models.account_model import Account
 
 router = APIRouter()
+
+
+@router.post("/me/google-key", response_model=Message)
+def upload_google_service_account(
+    session: SessionDep, current_user: CurrentUser, file: UploadFile = File(...)
+) -> Any:
+    """
+    Upload a per-user Google service account JSON key.
+    The file will be saved to `api_keys/{user_id}_drive.json` and the user's
+    `google_service_account_file` column will be updated so workers can use it.
+    """
+    if file.content_type not in ("application/json", "application/octet-stream"):
+        raise HTTPException(status_code=400, detail="Invalid file type; JSON expected")
+
+    user_key_dir = "api_keys"
+    os.makedirs(user_key_dir, exist_ok=True)
+    dest_path = os.path.join(user_key_dir, f"{str(current_user.id)}_drive.json")
+
+    try:
+        contents = file.file.read()
+        with open(dest_path, "wb") as f:
+            f.write(contents)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save key file: {e}")
+    finally:
+        file.file.close()
+
+    # Save path and upload timestamp to user record
+    current_user.google_service_account_file = dest_path
+    from datetime import datetime
+
+    current_user.google_service_account_uploaded_at = datetime.utcnow()
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+
+    return Message(message="Google service account uploaded successfully")
+
+
+@router.delete("/me/google-key", response_model=Message)
+def delete_google_service_account(
+    session: SessionDep, current_user: CurrentUser
+) -> Any:
+    """
+    Remove the uploaded Google service account key for the current user.
+    """
+    if not current_user.google_service_account_file:
+        raise HTTPException(
+            status_code=404, detail="No Google key uploaded for this user"
+        )
+
+    try:
+        os.remove(current_user.google_service_account_file)
+    except FileNotFoundError:
+        # already gone, ignore
+        pass
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to remove key file: {e}")
+
+    current_user.google_service_account_file = None
+    current_user.google_service_account_uploaded_at = None
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+
+    return Message(message="Google service account removed")
 
 
 @router.get(
@@ -226,7 +289,3 @@ def delete_user(
     session.delete(user)
     session.commit()
     return Message(message="User deleted successfully")
-
-
-
-

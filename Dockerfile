@@ -1,45 +1,67 @@
-# Use an official Python runtime as a parent image
-FROM python:3.12-alpine
+FROM python:3.13-slim-bookworm
 
-# Set the working directory in the container
+# Build-time arguments for environment configuration
+ARG ENV=production
+ARG APP_VERSION=latest
+ARG GIT_BRANCH=unknown
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    libpq-dev \
+    gcc \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN adduser --disabled-password --gecos "" appuser
+
+# Set up working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apk add --no-cache \
-    gcc \
-    musl-dev \
-    libffi-dev \
-    curl \
-    make \
-    openssl-dev
+# Install UV
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+RUN uv --version
 
+# Create directories with correct permissions
+RUN mkdir -p /home/appuser/.cache/uv /app/.venv \
+    && chown -R appuser:appuser /home/appuser /app
 
-RUN apk add --no-cache \
-    xvfb \
-    chromium \
-    chromium-chromedriver \
-    && rm -rf /var/cache/apk/*
+# Copy ALL application files first
+COPY --chown=appuser:appuser . .
 
+# Add environment label
+LABEL environment=${ENV}
+LABEL version=${APP_VERSION}
+LABEL git_branch=${GIT_BRANCH}
+LABEL maintainer="AutoClipFlow Team"
 
-# Install Poetry
-RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3 && \
-    ln -s /opt/poetry/bin/poetry /usr/local/bin/poetry && \
-    poetry config virtualenvs.create false
+# Switch to non-root user for dependency installation
+USER appuser
 
-# Copy poetry files
-COPY ./pyproject.toml ./poetry.lock* /app/
+# Install dependencies based on environment
+RUN if [ "$ENV" = "development" ] || [ "$ENV" = "staging" ]; then \
+    uv sync; \
+    else \
+    uv sync --frozen; \
+    fi
 
-# Install dependencies
-ARG INSTALL_DEV=false
-RUN sh -c "if [ $INSTALL_DEV == 'true' ]; then poetry install --no-root; else poetry install --no-root --only main; fi"
+# Make entrypoint executable
+RUN chmod +x entrypoint.sh
 
-ENV PYTHONPATH=/app
+# Configure environment
+ENV PYTHONPATH="/app" \
+    PORT=8080 \
+    PATH="/app/.venv/bin:$PATH" \
+    HOME="/home/appuser" \
+    APP_ENV=${ENV}
 
-# Copy application code
-COPY . /app/
+# Expose port
+EXPOSE 8080
 
+# Add health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health/ || exit 1
 
-# Clean up build dependencies (optional but recommended)
-RUN apk del gcc musl-dev libffi-dev && rm -rf /var/cache/apk/*
-
-EXPOSE 8000
+# Set entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]

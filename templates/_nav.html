@@ -1,0 +1,22 @@
+<nav class="bg-slate-900 border-b border-white/10 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex justify-between items-center">
+            <a href="/dashboard" class="flex items-center gap-3 text-white">
+                <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                    <i class="fas fa-video text-white"></i>
+                </div>
+                <span class="text-xl font-semibold">AutoClip Flow</span>
+            </a>
+            <div class="flex items-center gap-8">
+                <a href="/dashboard" class="text-white border-b-2 border-blue-500 pb-1">Dashboard</a>
+                <a href="/accounts" class="text-gray-300 hover:text-white transition-colors">Accounts</a>
+                <a href="/automation" class="text-gray-300 hover:text-white transition-colors">Automation</a>
+                <a href="/users" class="text-gray-300 hover:text-white transition-colors">Users</a>
+                <a href="/profile"
+                    class="px-3 py-2 bg-white/5 hover:bg-white/10 text-gray-200 rounded-lg transition-colors">Profile</a>
+                <button id="logout-btn" onclick="localStorage.removeItem('access_token'); window.location.href='/'"
+                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">Logout</button>
+            </div>
+        </div>
+    </div>
+</nav>

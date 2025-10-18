@@ -23,6 +23,9 @@ class UserTaskBase(SQLModel):
     title: str | None = None
     status: TaskStatus = Field(default=TaskStatus.PENDING)
     progress: Optional[int] = Field(default=0)
+    # Celery task id (the broker-assigned id for the background job). This is
+    # distinct from the DB primary key `id` and is optional.
+    task_id: Optional[str] = Field(default=None, index=True)
     scheduled_time: Optional[datetime] = Field(default=None)
     user_id: uuid.UUID = Field(foreign_key="user.id", index=True)
     account_id: Optional[uuid.UUID] = Field(foreign_key="account.id")

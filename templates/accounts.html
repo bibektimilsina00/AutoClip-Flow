@@ -11,40 +11,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
 <body class="bg-slate-900 min-h-screen">
-    {% raw %}
     <div id="app">
-        <!-- Navigation -->
-        <nav class="bg-slate-900 border-b border-white/10 sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-6 py-4">
-                <div class="flex justify-between items-center">
-                    <a href="/dashboard" class="flex items-center gap-3 text-white">
-                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
-                            <i class="fas fa-video text-white"></i>
-                        </div>
-                        <span class="text-xl font-semibold">AutoClip Flow</span>
-                    </a>
-                    <div class="flex items-center gap-8">
-                        <a href="/dashboard" class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
-                        <a href="/accounts" class="text-white border-b-2 border-blue-500 pb-1">Accounts</a>
-                        <a href="/automation" class="text-gray-300 hover:text-white transition-colors">Automation</a>
-                        <a href="/users" class="text-gray-300 hover:text-white transition-colors">Users</a>
-                        <button @click="logout"
-                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
-                            Logout
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        {% include '_nav.html' %}
+
+        {% raw %}
 
         <!-- Main Content -->
         <div class="max-w-7xl mx-auto px-6 py-8">
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl font-bold text-white">Social Media Accounts</h1>
-                <button @click="showAddModal = true"
-                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                <a href="/accounts/new"
+                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors inline-flex items-center">
                     <i class="fas fa-plus mr-2"></i>Add Account
-                </button>
+                </a>
             </div>
 
             <div v-if="loading" class="text-center py-12">
@@ -67,10 +46,10 @@
                             <p class="text-gray-500 text-xs">{{ account.category }}</p>
                         </div>
                         <div class="flex gap-2">
-                            <button @click="editAccount(account)"
+                            <a :href="`/accounts/${account.id}/edit`"
                                 class="w-8 h-8 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 flex items-center justify-center transition-colors">
                                 <i class="fas fa-edit text-blue-400"></i>
-                            </button>
+                            </a>
                             <button @click="deleteAccount(account)"
                                 class="w-8 h-8 rounded-lg bg-red-600/20 hover:bg-red-600/30 flex items-center justify-center transition-colors">
                                 <i class="fas fa-trash text-red-400"></i>
@@ -78,96 +57,21 @@
                         </div>
                     </div>
                     <div class="text-xs text-gray-500">
-                        Platform: {{ account.platform ? account.platform.charAt(0).toUpperCase() +
-                        account.platform.slice(1) : 'N/A' }}
+                        Platforms:
+                        <template v-if="account.platforms">
+                            <span v-for="(p, i) in (account.platforms.split(',').map(s => s.trim()).filter(Boolean))"
+                                :key="i">
+                                {{ p.charAt(0).toUpperCase() + p.slice(1) }}<span
+                                    v-if="i < account.platforms.split(',').length - 1">, </span>
+                            </span>
+                        </template>
+                        <span v-else>N/A</span>
                     </div>
                 </div>
             </div>
             </main>
 
-            <!-- Add/Edit Modal -->
-            <div v-if="showAddModal || showEditModal"
-                class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-                <div class="bg-slate-800 border border-white/20 rounded-2xl max-w-md w-full p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h5 class="text-xl font-semibold text-white">{{ showEditModal ? 'Edit Account' : 'Add Account'
-                            }}</h5>
-                        <button @click="closeModal" class="text-gray-400 hover:text-white transition-colors">✕</button>
-                    </div>
-                    <form @submit.prevent="saveAccount" class="space-y-4">
-                        <div>
-                            <label class="text-sm text-gray-300">Category</label>
-                            <input type="text" v-model="accountForm.category" required
-                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
-                                placeholder="e.g., Personal, Business">
-                        </div>
-                        <div>
-                            <label class="text-sm text-gray-300">Name</label>
-                            <input type="text" v-model="accountForm.name" required
-                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
-                                placeholder="Account display name">
-                        </div>
-                        <div>
-                            <label class="text-sm text-gray-300">Email</label>
-                            <input type="email" v-model="accountForm.email" required
-                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
-                                placeholder="account@example.com">
-                        </div>
-                        <div>
-                            <label class="text-sm text-gray-300">Google Drive Folder ID</label>
-                            <input type="text" v-model="accountForm.google_drive_folder_id" required
-                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
-                                placeholder="Google Drive folder ID">
-                        </div>
-                        <div>
-                            <label class="text-sm text-gray-300">Platform</label>
-                            <select v-model="accountForm.selectedPlatform"
-                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white">
-                                <option value="" disabled class="bg-slate-800 text-gray-400">Select a platform</option>
-                                <option v-for="platform in availablePlatforms" :key="platform.value"
-                                    :value="platform.value" class="bg-slate-800 text-white">
-                                    {{ platform.label }}
-                                </option>
-                            </select>
-                        </div>
-                        <!-- Facebook-specific settings -->
-                        <div v-if="accountForm.selectedPlatform === 'facebook'" class="space-y-2">
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="postToPage" v-model="accountForm.facebook_post_to_page"
-                                    class="h-4 w-4 text-blue-600">
-                                <label for="postToPage" class="text-sm text-gray-300">Post to Facebook Page</label>
-                            </div>
-                            <div>
-                                <label class="text-sm text-gray-300">Facebook Page ID</label>
-                                <input type="text" v-model="accountForm.facebook_page_id"
-                                    class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
-                                    placeholder="Numeric Page ID (optional)">
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <input type="checkbox" id="postToGroup" v-model="accountForm.facebook_post_to_group"
-                                    class="h-4 w-4 text-blue-600">
-                                <label for="postToGroup" class="text-sm text-gray-300">Post to Facebook Group</label>
-                            </div>
-                            <div>
-                                <label class="text-sm text-gray-300">Facebook Group ID</label>
-                                <input type="text" v-model="accountForm.facebook_group_id"
-                                    class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
-                                    placeholder="Numeric Group ID (optional)">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="text-sm text-gray-300">Password</label>
-                            <input type="password" v-model="accountForm.password" :required="!showEditModal"
-                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
-                                placeholder="Account password">
-                        </div>
-                        <button type="submit"
-                            class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">{{
-                            showEditModal ?
-                            'Update' : 'Add' }} Account</button>
-                    </form>
-                </div>
-            </div>
+            <!-- Modal removed: account creation/edit moved to dedicated page (/accounts/new and /accounts/{id}/edit) -->
         </div>
         {% endraw %}
 
@@ -188,7 +92,8 @@
                             name: '',
                             email: '',
                             google_drive_folder_id: '',
-                            selectedPlatform: '',
+                            // For multi-select platforms (array of values)
+                            selectedPlatforms: [],
                             facebook_page_id: '',
                             facebook_group_id: '',
                             facebook_post_to_page: false,
@@ -214,9 +119,16 @@
                         }
                     },
                     editAccount(account) {
+                        // Initialize selectedPlatforms from either the new 'platforms' CSV, the single 'platform',
+                        // or fallback to empty array.
+                        const platformsArr = [];
+                        if (account.platforms) {
+                            platformsArr.push(...account.platforms.split(',').map(p => p.trim()).filter(Boolean))
+                        }
+
                         this.accountForm = {
                             ...account,
-                            selectedPlatform: account.platform || '',
+                            selectedPlatforms: platformsArr,
                             facebook_page_id: account.facebook_page_id || '',
                             facebook_group_id: account.facebook_group_id || '',
                             facebook_post_to_page: account.facebook_post_to_page || false,
@@ -233,22 +145,29 @@
                             name: '',
                             email: '',
                             google_drive_folder_id: '',
-                            selectedPlatform: '',
+                            selectedPlatforms: [],
                             password: ''
                         }
                         this.editingId = null
                     },
                     async saveAccount() {
                         try {
+                            // Convert selectedPlatforms (array) into a CSV string for the legacy 'platforms' field
+                            const platformsCsv = (this.accountForm.selectedPlatforms || []).join(',')
+
                             const formData = {
-                                ...this.accountForm,
-                                platform: this.accountForm.selectedPlatform,
+                                // include explicit fields so we don't accidentally send UI-only props
+                                category: this.accountForm.category,
+                                name: this.accountForm.name,
+                                email: this.accountForm.email,
+                                google_drive_folder_id: this.accountForm.google_drive_folder_id,
+                                platforms: platformsCsv || null,
                                 facebook_page_id: this.accountForm.facebook_page_id,
                                 facebook_group_id: this.accountForm.facebook_group_id,
                                 facebook_post_to_page: this.accountForm.facebook_post_to_page,
-                                facebook_post_to_group: this.accountForm.facebook_post_to_group
+                                facebook_post_to_group: this.accountForm.facebook_post_to_group,
+                                password: this.accountForm.password || undefined
                             }
-                            delete formData.selectedPlatform
 
                             if (this.showEditModal) {
                                 await api.put(`/accounts/${this.editingId}`, formData)
@@ -259,6 +178,28 @@
                             this.fetchAccounts()
                         } catch (err) {
                             alert('Failed to save account')
+                        }
+                    },
+                    // Toggle a platform's selection on/off in selectedPlatforms array
+                    togglePlatform(platformValue) {
+                        const idx = this.accountForm.selectedPlatforms.indexOf(platformValue)
+                        if (idx === -1) {
+                            this.accountForm.selectedPlatforms.push(platformValue)
+                        } else {
+                            this.accountForm.selectedPlatforms.splice(idx, 1)
+                        }
+                    },
+                    isPlatformSelected(platformValue) {
+                        return this.accountForm.selectedPlatforms.includes(platformValue)
+                    },
+                    getPlatformIcon(platformValue) {
+                        // Map common platforms to FontAwesome icons (fallback to generic)
+                        switch ((platformValue || '').toLowerCase()) {
+                            case 'tiktok': return 'fab fa-tiktok'
+                            case 'instagram': return 'fab fa-instagram'
+                            case 'youtube': return 'fab fa-youtube'
+                            case 'facebook': return 'fab fa-facebook'
+                            default: return 'fas fa-globe'
                         }
                     },
                     async deleteAccount(account) {

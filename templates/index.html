@@ -25,39 +25,41 @@
 </head>
 
 <body>
-    {% raw %}
     <div id="app">
-        <!-- Navigation -->
-        <nav class="bg-slate-900 border-b border-white/10 sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-6 py-4">
-                <div class="flex justify-between items-center">
-                    <a href="/" class="flex items-center gap-3 text-white">
-                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
-                            <i class="fas fa-video text-white"></i>
-                        </div>
-                        <span class="text-xl font-semibold">AutoClip Flow</span>
-                    </a>
-                    <div class="flex items-center gap-8">
-                        <a href="/" class="text-white border-b-2 border-blue-500 pb-1">Home</a>
-                        <a v-if="isLoggedIn" href="/dashboard"
-                            class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
-                        <a v-if="isLoggedIn" href="/accounts"
-                            class="text-gray-300 hover:text-white transition-colors">Accounts</a>
-                        <a v-if="isLoggedIn" href="/automation"
-                            class="text-gray-300 hover:text-white transition-colors">Automation</a>
-                        <a v-if="isLoggedIn" href="/users"
-                            class="text-gray-300 hover:text-white transition-colors">Users</a>
-                        <a v-if="!isLoggedIn" href="/login"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
-                            Login
-                        </a>
-                        <button v-if="isLoggedIn" @click="logout"
-                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
-                            Logout
-                        </button>
+        {% include '_nav.html' %}
+
+        {% raw %}
+
+        <!-- Hero Section -->
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="flex items-center gap-3 text-white">
+                    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                        <i class="fas fa-video text-white"></i>
                     </div>
+                    <span class="text-xl font-semibold">AutoClip Flow</span>
+                </a>
+                <div class="flex items-center gap-8">
+                    <a href="/" class="text-white border-b-2 border-blue-500 pb-1">Home</a>
+                    <a v-if="isLoggedIn" href="/dashboard"
+                        class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                    <a v-if="isLoggedIn" href="/accounts"
+                        class="text-gray-300 hover:text-white transition-colors">Accounts</a>
+                    <a v-if="isLoggedIn" href="/automation"
+                        class="text-gray-300 hover:text-white transition-colors">Automation</a>
+                    <a v-if="isLoggedIn" href="/users"
+                        class="text-gray-300 hover:text-white transition-colors">Users</a>
+                    <a v-if="!isLoggedIn" href="/login"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                        Login
+                    </a>
+                    <button v-if="isLoggedIn" @click="logout"
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                        Logout
+                    </button>
                 </div>
             </div>
+        </div>
         </nav>
 
         <!-- Hero Section -->

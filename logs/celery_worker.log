@@ -1,10 +1,10 @@
  
- -------------- celery@Bibeks-MacBook-Air.local v5.4.0 (opalescent)
+ -------------- celery@Bibeks-MacBook-Air.local v5.5.3 (immunity)
 --- ***** ----- 
--- ******* ---- macOS-15.0.1-arm64-arm-64bit-Mach-O 2024-11-05 10:52:06
+-- ******* ---- macOS-14.7.8-arm64-arm-64bit-Mach-O 2025-10-18 21:06:02
 - *** --- * --- 
 - ** ---------- [config]
-- ** ---------- .> app:         worker:0x118a2de80
+- ** ---------- .> app:         worker:0x1073dfb60
 - ** ---------- .> transport:   redis://localhost:6379/0
 - ** ---------- .> results:     redis://localhost:6379/0
 - *** --- * --- .> concurrency: 8 (prefork)
@@ -19,99 +19,8 @@
   . celery_worker.task.run_user_automation
   . celery_worker.task.schedule_next_day
 
-[2024-11-05 10:52:07,110: INFO/MainProcess] Connected to redis://localhost:6379/0
-[2024-11-05 10:52:07,119: INFO/MainProcess] mingle: searching for neighbors
-[2024-11-05 10:52:08,138: INFO/MainProcess] mingle: all alone
-[2024-11-05 10:52:08,161: INFO/MainProcess] celery@Bibeks-MacBook-Air.local ready.
-[2024-11-05 10:52:11,912: INFO/MainProcess] Events of group {task} enabled by remote.
-[2024-11-05 10:54:00,583: WARNING/MainProcess] consumer: Connection to broker lost. Trying to re-establish the connection...
-Traceback (most recent call last):
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/celery/worker/consumer/consumer.py", line 340, in start
-    blueprint.start(self)
-    ~~~~~~~~~~~~~~~^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/celery/bootsteps.py", line 116, in start
-    step.start(parent)
-    ~~~~~~~~~~^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/celery/worker/consumer/consumer.py", line 746, in start
-    c.loop(*c.loop_args())
-    ~~~~~~^^^^^^^^^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/celery/worker/loops.py", line 97, in asynloop
-    next(loop)
-    ~~~~^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/kombu/asynchronous/hub.py", line 373, in create_loop
-    cb(*cbargs)
-    ~~^^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/kombu/transport/redis.py", line 1352, in on_readable
-    self.cycle.on_readable(fileno)
-    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/kombu/transport/redis.py", line 569, in on_readable
-    chan.handlers[type]()
-    ~~~~~~~~~~~~~~~~~~~^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/kombu/transport/redis.py", line 918, in _receive
-    ret.append(self._receive_one(c))
-               ~~~~~~~~~~~~~~~~~^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/kombu/transport/redis.py", line 928, in _receive_one
-    response = c.parse_response()
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/client.py", line 865, in parse_response
-    response = self._execute(conn, try_read)
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/client.py", line 841, in _execute
-    return conn.retry.call_with_retry(
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
-        lambda: command(*args, **kwargs),
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        lambda error: self._disconnect_raise_connect(conn, error),
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/retry.py", line 65, in call_with_retry
-    fail(error)
-    ~~~~^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/client.py", line 843, in <lambda>
-    lambda error: self._disconnect_raise_connect(conn, error),
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/client.py", line 830, in _disconnect_raise_connect
-    raise error
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/retry.py", line 62, in call_with_retry
-    return do()
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/client.py", line 842, in <lambda>
-    lambda: command(*args, **kwargs),
-            ~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/client.py", line 863, in try_read
-    return conn.read_response(disconnect_on_error=False, push_request=True)
-           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/connection.py", line 592, in read_response
-    response = self._parser.read_response(disable_decoding=disable_decoding)
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/_parsers/resp2.py", line 15, in read_response
-    result = self._read_response(disable_decoding=disable_decoding)
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/_parsers/resp2.py", line 25, in _read_response
-    raw = self._buffer.readline()
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/_parsers/socket.py", line 115, in readline
-    self._read_from_socket()
-    ~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/redis/_parsers/socket.py", line 68, in _read_from_socket
-    raise ConnectionError(SERVER_CLOSED_CONNECTION_ERROR)
-redis.exceptions.ConnectionError: Connection closed by server.
-[2024-11-05 10:54:00,683: WARNING/MainProcess] /Users/bibektimilsina/Library/Caches/pypoetry/virtualenvs/backend-yJOuBi-v-py3.13/lib/python3.13/site-packages/celery/worker/consumer/consumer.py:391: CPendingDeprecationWarning: 
-In Celery 5.1 we introduced an optional breaking change which
-on connection loss cancels all currently executed tasks with late acknowledgement enabled.
-These tasks cannot be acknowledged as the connection is gone, and the tasks are automatically redelivered
-back to the queue. You can enable this behavior using the worker_cancel_long_running_tasks_on_connection_loss
-setting. In Celery 5.1 it is set to False by default. The setting will be set to True by default in Celery 6.0.
-
-  warnings.warn(CANCEL_TASKS_BY_DEFAULT, CPendingDeprecationWarning)
-
-[2024-11-05 10:54:00,715: ERROR/MainProcess] consumer: Cannot connect to redis://localhost:6379/0: Error while reading from localhost:6379 : (54, 'Connection reset by peer').
-Trying again in 2.00 seconds... (1/100)
-
-[2024-11-05 10:54:02,731: ERROR/MainProcess] consumer: Cannot connect to redis://localhost:6379/0: Error 61 connecting to localhost:6379. Connection refused..
-Trying again in 4.00 seconds... (2/100)
-
-[2024-11-05 10:54:06,747: ERROR/MainProcess] consumer: Cannot connect to redis://localhost:6379/0: Error 61 connecting to localhost:6379. Connection refused..
-Trying again in 6.00 seconds... (3/100)
-
-[2024-11-05 10:54:12,775: ERROR/MainProcess] consumer: Cannot connect to redis://localhost:6379/0: Error 61 connecting to localhost:6379. Connection refused..
-Trying again in 8.00 seconds... (4/100)
-
-[2024-11-05 10:54:20,815: ERROR/MainProcess] consumer: Cannot connect to redis://localhost:6379/0: Error 61 connecting to localhost:6379. Connection refused..
-Trying again in 10.00 seconds... (5/100)
-
+[2025-10-18 21:06:03,794: INFO/MainProcess] Connected to redis://localhost:6379/0
+[2025-10-18 21:06:03,806: INFO/MainProcess] mingle: searching for neighbors
+[2025-10-18 21:06:04,827: INFO/MainProcess] mingle: all alone
+[2025-10-18 21:06:04,854: INFO/MainProcess] celery@Bibeks-MacBook-Air.local ready.
+[2025-10-18 21:06:07,743: INFO/MainProcess] Events of group {task} enabled by remote.

@@ -1,10 +1,12 @@
 #! /usr/bin/env bash
 
-# Let the DB start
-python ../backend_pre_start.py
+#! /usr/bin/env bash
 
-# Run migrations
-alembic upgrade head
+# Let the DB start (run under uv runner)
+uv run python ../backend_pre_start.py
+
+# Run migrations using uv so it uses the project's environment
+uv run alembic upgrade head
 
 # Create initial data in DB
-python ./initial_data.py
+uv run python ./initial_data.py

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoClip Flow - Account</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<body class="bg-slate-900 min-h-screen">
+    <div id="app">
+        {% include '_nav.html' %}
+
+        {% raw %}
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/dashboard" class="flex items-center gap-3 text-white">
+                    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                        <i class="fas fa-video text-white"></i>
+                    </div>
+                    <span class="text-xl font-semibold">AutoClip Flow</span>
+                </a>
+                <div class="flex items-center gap-8">
+                    <a href="/dashboard" class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                    <a href="/accounts" class="text-white border-b-2 border-blue-500 pb-1">Accounts</a>
+                    <a href="/automation" class="text-gray-300 hover:text-white transition-colors">Automation</a>
+                    <a href="/users" class="text-gray-300 hover:text-white transition-colors">Users</a>
+                    <button @click="logout"
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+        </nav>
+
+        <div class="max-w-3xl mx-auto px-6 py-8">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <a href="/accounts"
+                        class="-ml-6 inline-block text-lg font-medium text-gray-200 hover:underline px-2 py-1">← Back to
+                        Accounts</a>
+                    <h1 class="text-3xl font-bold text-white mt-2">{{ isEdit ? 'Edit Account' : 'Add Account' }}</h1>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 border border-white/20 rounded-2xl p-6">
+                <form @submit.prevent="saveAccount" class="space-y-4">
+                    <div>
+                        <label class="text-sm text-gray-300">Category</label>
+                        <input type="text" v-model="accountForm.category" required
+                            class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                            placeholder="e.g., Personal, Business">
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-300">Name</label>
+                        <input type="text" v-model="accountForm.name" required
+                            class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                            placeholder="Account display name">
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-300">Email</label>
+                        <input type="email" v-model="accountForm.email" required
+                            class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                            placeholder="account@example.com">
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-300">Google Drive Folder ID</label>
+                        <input type="text" v-model="accountForm.google_drive_folder_id" required
+                            class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                            placeholder="Google Drive folder ID">
+                    </div>
+
+                    <div>
+                        <label class="text-sm text-gray-300">Platform(s)</label>
+                        <div class="mt-3 flex flex-col gap-3">
+                            <div v-for="platform in availablePlatforms" :key="platform.value" class="">
+                                <button type="button" @click="togglePlatform(platform.value)"
+                                    @keydown.enter.prevent="togglePlatform(platform.value)"
+                                    :aria-pressed="isPlatformSelected(platform.value)"
+                                    class="w-full text-left px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-between"
+                                    :class="isPlatformSelected(platform.value) ? 'bg-blue-600 border-transparent text-white shadow' : 'bg-white/5 border-white/10 text-white'">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-10 h-10 rounded-md flex items-center justify-center bg-white/10 text-blue-400">
+                                            <i :class="getPlatformIcon(platform.value)" class="text-lg"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium">{{ platform.label }}</div>
+                                            <div class="text-xs text-gray-300">Click to include</div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div v-if="isPlatformSelected(platform.value)"
+                                            class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
+                                            <i class="fas fa-check text-white text-xs"></i>
+                                        </div>
+                                    </div>
+                                </button>
+
+                                <!-- If this is the Facebook card, render page/group toggles directly below it -->
+                                <div v-if="platform.value === 'facebook'" class="mt-2 pl-4">
+                                    <div v-if="isPlatformSelected('facebook')" class="space-y-2">
+                                        <div class="flex items-center gap-2">
+                                            <input type="checkbox" id="postToPage"
+                                                v-model="accountForm.facebook_post_to_page"
+                                                class="h-4 w-4 text-blue-600">
+                                            <label for="postToPage" class="text-sm text-gray-300">Post to Facebook
+                                                Page</label>
+                                        </div>
+                                        <div>
+                                            <label class="text-sm text-gray-300">Facebook Page ID</label>
+                                            <input type="text" v-model="accountForm.facebook_page_id"
+                                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                                                placeholder="Numeric Page ID (optional)">
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <input type="checkbox" id="postToGroup"
+                                                v-model="accountForm.facebook_post_to_group"
+                                                class="h-4 w-4 text-blue-600">
+                                            <label for="postToGroup" class="text-sm text-gray-300">Post to Facebook
+                                                Group</label>
+                                        </div>
+                                        <div>
+                                            <label class="text-sm text-gray-300">Facebook Group ID</label>
+                                            <input type="text" v-model="accountForm.facebook_group_id"
+                                                class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                                                placeholder="Numeric Group ID (optional)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-2">Tap / click items to toggle selection. Selected platforms
+                            will be sent to the backend.</p>
+                    </div>
+
+                    <div>
+                        <label class="text-sm text-gray-300">Password</label>
+                        <input type="password" v-model="accountForm.password" :required="!isEdit"
+                            class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                            placeholder="Account password">
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="submit"
+                            class="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">{{
+                            isEdit ? 'Update' : 'Add' }} Account</button>
+                        <a href="/accounts"
+                            class="px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endraw %}
+
+    <script>
+        const token = localStorage.getItem('access_token')
+        const api = axios.create({ baseURL: '/api/v1', headers: token ? { Authorization: `Bearer ${token}` } : {} })
+
+        const AccountFormApp = {
+            data() {
+                return {
+                    availablePlatforms: [],
+                    accountForm: {
+                        category: '',
+                        name: '',
+                        email: '',
+                        google_drive_folder_id: '',
+                        selectedPlatforms: [],
+                        facebook_page_id: '',
+                        facebook_group_id: '',
+                        facebook_post_to_page: false,
+                        facebook_post_to_group: false,
+                        password: ''
+                    },
+                    isEdit: false,
+                    editId: null
+                }
+            },
+            async created() {
+                this.fetchPlatforms()
+                // Detect if this page is for editing by checking the path
+                const parts = window.location.pathname.split('/').filter(Boolean)
+                if (parts.length === 3 && parts[2] === 'edit') {
+                    this.isEdit = true
+                    this.editId = parts[1]
+                    await this.fetchAccount(this.editId)
+                }
+            },
+            methods: {
+                async fetchPlatforms() {
+                    try {
+                        const res = await api.get('/accounts/platforms')
+                        this.availablePlatforms = res.data.platforms
+                    } catch (err) {
+                        console.error('Failed to load platforms:', err)
+                    }
+                },
+                async fetchAccount(id) {
+                    try {
+                        const res = await api.get(`/accounts/${id}`)
+                        const account = res.data.data || res.data
+                        const platformsArr = []
+                        if (account.platforms) platformsArr.push(...account.platforms.split(',').map(p => p.trim()).filter(Boolean))
+                        this.accountForm = {
+                            ...this.accountForm,
+                            ...account,
+                            selectedPlatforms: platformsArr,
+                            facebook_page_id: account.facebook_page_id || '',
+                            facebook_group_id: account.facebook_group_id || '',
+                            facebook_post_to_page: account.facebook_post_to_page || false,
+                            facebook_post_to_group: account.facebook_post_to_group || false,
+                            password: ''
+                        }
+                    } catch (err) {
+                        alert('Failed to load account')
+                    }
+                },
+                async saveAccount() {
+                    try {
+                        const platformsCsv = (this.accountForm.selectedPlatforms || []).join(',')
+                        const payload = {
+                            category: this.accountForm.category,
+                            name: this.accountForm.name,
+                            email: this.accountForm.email,
+                            google_drive_folder_id: this.accountForm.google_drive_folder_id,
+                            platforms: platformsCsv || null,
+                            facebook_page_id: this.accountForm.facebook_page_id,
+                            facebook_group_id: this.accountForm.facebook_group_id,
+                            facebook_post_to_page: this.accountForm.facebook_post_to_page,
+                            facebook_post_to_group: this.accountForm.facebook_post_to_group,
+                            password: this.accountForm.password || undefined
+                        }
+                        if (this.isEdit) {
+                            await api.put(`/accounts/${this.editId}`, payload)
+                        } else {
+                            await api.post('/accounts/', payload)
+                        }
+                        window.location.href = '/accounts'
+                    } catch (err) {
+                        alert('Failed to save account')
+                    }
+                },
+                togglePlatform(platformValue) {
+                    const idx = this.accountForm.selectedPlatforms.indexOf(platformValue)
+                    if (idx === -1) this.accountForm.selectedPlatforms.push(platformValue)
+                    else this.accountForm.selectedPlatforms.splice(idx, 1)
+                },
+                isPlatformSelected(platformValue) {
+                    return this.accountForm.selectedPlatforms.includes(platformValue)
+                },
+                getPlatformIcon(platformValue) {
+                    switch ((platformValue || '').toLowerCase()) {
+                        case 'tiktok': return 'fab fa-tiktok'
+                        case 'instagram': return 'fab fa-instagram'
+                        case 'youtube': return 'fab fa-youtube'
+                        case 'facebook': return 'fab fa-facebook'
+                        default: return 'fas fa-globe'
+                    }
+                },
+                logout() { localStorage.removeItem('access_token'); window.location.href = '/' }
+            }
+        }
+
+        Vue.createApp(AccountFormApp).mount('#app')
+    </script>
+</body>
+
+</html>

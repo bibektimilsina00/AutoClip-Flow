@@ -1,10 +1,10 @@
 import logging
 
+from core.db import engine
 from sqlalchemy import Engine
+from sqlalchemy.exc import OperationalError
 from sqlmodel import Session, select
 from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
-
-from core.db import engine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -25,7 +25,15 @@ def init(db_engine: Engine) -> None:
             # Try to create session to check if DB is awake
             session.exec(select(1))
     except Exception as e:
-        logger.error(e)
+        # Surface OperationalError with extra guidance for network/timeouts
+        if isinstance(e, OperationalError):
+            logger.error(
+                "Database OperationalError: %s. This often means the DB is unreachable, timed out, or credentials are incorrect."
+                " Check POSTGRES_* env vars and whether the DB server is reachable from this host.",
+                e,
+            )
+        else:
+            logger.error(e)
         raise e
 
 

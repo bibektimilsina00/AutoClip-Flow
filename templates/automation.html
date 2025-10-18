@@ -11,41 +11,32 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
 <body class="bg-slate-900 min-h-screen">
-    {% raw %}
     <div id="app">
-        <!-- Navigation -->
-        <nav class="bg-slate-900 border-b border-white/10 sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-6 py-4">
-                <div class="flex justify-between items-center">
-                    <a href="/dashboard" class="flex items-center gap-3 text-white">
-                        <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
-                            <i class="fas fa-video text-white"></i>
-                        </div>
-                        <span class="text-xl font-semibold">AutoClip Flow</span>
-                    </a>
-                    <div class="flex items-center gap-8">
-                        <a href="/dashboard" class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
-                        <a href="/accounts" class="text-gray-300 hover:text-white transition-colors">Accounts</a>
-                        <a href="/automation" class="text-white border-b-2 border-blue-500 pb-1">Automation</a>
-                        <a href="/users" class="text-gray-300 hover:text-white transition-colors">Users</a>
-                        <button @click="logout"
-                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
-                            Logout
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        {% include '_nav.html' %}
+
+        {% raw %}
 
         <!-- Main Content -->
         <div class="max-w-7xl mx-auto px-6 py-8">
+            <div v-if="automationError" class="fixed top-20 right-6 z-50">
+                <div class="bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="text-sm">{{ automationError }}</div>
+                        <button @click="automationError = null" class="ml-3 text-white/80 hover:text-white">✕</button>
+                    </div>
+                </div>
+            </div>
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl font-bold text-white">Automation Control</h1>
                 <div class="flex gap-3">
                     <button @click="automationRunning ? stopAutomation() : startAutomation()"
+                        :disabled="automationLoading"
                         :class="automationRunning ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'"
-                        class="px-6 py-3 text-white rounded-lg transition-colors">
-                        <i :class="automationRunning ? 'fas fa-stop' : 'fas fa-play'" class="mr-2"></i>
+                        class="px-6 py-3 text-white rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2">
+                        <i v-if="!automationLoading" :class="automationRunning ? 'fas fa-stop' : 'fas fa-play'"
+                            class="mr-2"></i>
+                        <i v-else class="fas fa-spinner fa-spin mr-2"></i>
                         {{ automationRunning ? 'Stop' : 'Start' }} Automation
                     </button>
                 </div>
@@ -114,12 +105,13 @@
                                 <th class="text-left py-3 text-gray-300">Status</th>
                                 <th class="text-left py-3 text-gray-300">Progress</th>
                                 <th class="text-left py-3 text-gray-300">Created</th>
+                                <th class="text-left py-3 text-gray-300">Error</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="task in tasks" :key="task.task_id" class="border-b border-white/5">
                                 <td class="py-3 text-white">{{ task.account_id }}</td>
-                                <td class="py-3 text-white">{{ task.task_id.slice(-8) }}</td>
+                                <td class="py-3 text-white">{{ (task.task_id || '').slice(-8) }}</td>
                                 <td class="py-3">
                                     <span :class="getStatusClass(task.status)"
                                         class="px-3 py-1 rounded-full text-xs font-medium">
@@ -135,6 +127,8 @@
                                     </div>
                                 </td>
                                 <td class="py-3 text-gray-300">{{ formatDate(task.created_at) }}</td>
+                                <td class="py-3 text-red-400 text-sm">{{ task.error || (task.result &&
+                                    task.result.exc_message) || '' }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -151,6 +145,9 @@
                         return {
                             tasks: [],
                             automationRunning: false
+                            ,
+                            automationLoading: false,
+                            automationError: null
                         }
                     },
                     computed: {
@@ -175,21 +172,29 @@
                             }
                         },
                         async startAutomation() {
+                            this.automationLoading = true
+                            this.automationError = null
                             try {
                                 await api.post('/automation/start_automation')
                                 this.automationRunning = true
                                 setTimeout(() => this.fetchTasks(), 1000)
                             } catch (err) {
-                                alert('Failed to start automation')
+                                this.automationError = (err?.response?.data?.detail) || 'Failed to start automation'
+                            } finally {
+                                this.automationLoading = false
                             }
                         },
                         async stopAutomation() {
+                            this.automationLoading = true
+                            this.automationError = null
                             try {
                                 await api.post('/automation/stop_automation')
                                 this.automationRunning = false
                                 setTimeout(() => this.fetchTasks(), 1000)
                             } catch (err) {
-                                alert('Failed to stop automation')
+                                this.automationError = (err?.response?.data?.detail) || 'Failed to stop automation'
+                            } finally {
+                                this.automationLoading = false
                             }
                         },
                         async clearTasks() {

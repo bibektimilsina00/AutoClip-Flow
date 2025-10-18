@@ -14,9 +14,10 @@ from automation.utils.logging_utils import LoggingUtils, logger
 
 
 class MainApp(BaseCase):
-    def __init__(self, user_id):
+    def __init__(self, user_id, user_google_credentials: str | None = None):
         super().__init__()
-        self.google_drive = GoogleDriveService()
+        # Allow passing a per-user credentials path which will be used by GoogleDriveService
+        self.google_drive = GoogleDriveService(credentials_path=user_google_credentials)
         self.video_manager = VideoManager()
         self.user_id = str(user_id)
 
